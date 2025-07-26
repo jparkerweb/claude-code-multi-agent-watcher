@@ -455,45 +455,54 @@
   --theme-focus-ring: #16a34a;
 }
 
-/* Neon theme - Vibrant cyberpunk theme with electric colors */
+/* Cyberpunk Neon theme - Authentic cyberpunk aesthetic with electric colors and glow effects */
 .theme-neon {
-  /* Primary colors */
-  --theme-primary: #00ff00;
-  --theme-primary-hover: #00cc00;
-  --theme-primary-light: #80ff80;
-  --theme-primary-dark: #009900;
+  /* Primary colors - Electric Cyan with glow but darker for better contrast */
+  --theme-primary: #00cccc;
+  --theme-primary-hover: #00aaaa;
+  --theme-primary-light: #003333;
+  --theme-primary-dark: #001111;
   
-  /* Background colors */
-  --theme-bg-primary: #0a0a0a;
-  --theme-bg-secondary: #1a1a1a;
-  --theme-bg-tertiary: #2a2a2a;
-  --theme-bg-quaternary: #3a3a3a;
+  /* Background colors - Deep black to dark navy gradient */
+  --theme-bg-primary: #000000;
+  --theme-bg-secondary: #0a0a0f;
+  --theme-bg-tertiary: #0f0f1a;
+  --theme-bg-quaternary: #1a1a2e;
   
-  /* Text colors */
-  --theme-text-primary: #00ff00;
-  --theme-text-secondary: #80ff80;
-  --theme-text-tertiary: #ccffcc;
-  --theme-text-quaternary: #e6ffe6;
+  /* Text colors - Cyan with neon glow */
+  --theme-text-primary: #00ffff;
+  --theme-text-secondary: #66ffff;
+  --theme-text-tertiary: #99ffff;
+  --theme-text-quaternary: #ccffff;
   
-  /* Border colors */
-  --theme-border-primary: #00cc00;
-  --theme-border-secondary: #00aa00;
-  --theme-border-tertiary: #008800;
+  /* Border colors - Neon cyan variations */
+  --theme-border-primary: #00ffff;
+  --theme-border-secondary: #00cccc;
+  --theme-border-tertiary: #009999;
   
-  /* Accent colors */
-  --theme-accent-success: #00ff80;
-  --theme-accent-warning: #ffff00;
-  --theme-accent-error: #ff0080;
-  --theme-accent-info: #00ffff;
+  /* Accent colors - Classic cyberpunk palette */
+  --theme-accent-success: #00ff41;  /* Electric Green */
+  --theme-accent-warning: #ffff00;  /* Electric Yellow */
+  --theme-accent-error: #ff0080;    /* Hot Pink */
+  --theme-accent-info: #8a2be2;     /* Electric Purple */
   
-  /* Shadow colors */
-  --theme-shadow: rgba(0, 255, 0, 0.3);
-  --theme-shadow-lg: rgba(0, 255, 0, 0.5);
+  /* Shadow colors with neon glow */
+  --theme-shadow: rgba(0, 255, 255, 0.4);
+  --theme-shadow-lg: rgba(0, 255, 255, 0.6);
   
-  /* Interactive states */
-  --theme-hover-bg: rgba(0, 255, 0, 0.1);
-  --theme-active-bg: rgba(0, 255, 0, 0.2);
-  --theme-focus-ring: #00ff00;
+  /* Interactive states with cyan glow */
+  --theme-hover-bg: rgba(0, 255, 255, 0.1);
+  --theme-active-bg: rgba(0, 255, 255, 0.2);
+  --theme-focus-ring: #00ffff;
+  
+  /* Custom cyberpunk variables - Reduced glow for better readability */
+  --cyber-glow-primary: 0 0 2px #00ffff, 0 0 4px #00ffff, 0 0 6px #00ffff;
+  --cyber-glow-secondary: 0 0 1px #ff0080, 0 0 3px #ff0080, 0 0 4px #ff0080;
+  --cyber-glow-success: 0 0 2px #00ff41, 0 0 4px #00ff41, 0 0 6px #00ff41;
+  --cyber-grid-pattern: 
+    linear-gradient(rgba(0, 255, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 255, 255, 0.03) 1px, transparent 1px);
+  --cyber-grid-size: 20px 20px;
 }
 
 /* Vintage theme - Retro sepia theme with aged paper appearance */
@@ -817,6 +826,290 @@
 .theme-glass .backdrop-blur {
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
+}
+
+/* Cyberpunk Neon Theme Effects 
+ * 
+ * Usage of cyberpunk effect classes:
+ * - .cyber-glow-text: Standard neon text glow
+ * - .cyber-glow-header: Enhanced glow for headers
+ * - .cyber-button: Neon button with glow effects
+ * - .cyber-border: Glowing border effect
+ * - .cyber-card: Card with cyberpunk styling
+ * - .cyber-scanlines: Adds subtle scan line overlay
+ * - .cyber-status-online: Green pulsing status indicator
+ * - .cyber-status-offline: Pink pulsing status indicator
+ * - .cyber-flicker: Subtle text flicker effect
+ */
+.theme-neon {
+  /* Grid background pattern */
+  background-image: var(--cyber-grid-pattern);
+  background-size: var(--cyber-grid-size);
+  background-position: 0 0, 0 0;
+}
+
+/* Cyberpunk text glow effects */
+.theme-neon .cyber-glow-text {
+  text-shadow: var(--cyber-glow-primary);
+  color: var(--theme-text-primary);
+  font-weight: 500;
+}
+
+.theme-neon .cyber-glow-header {
+  text-shadow: 
+    0 0 2px currentColor,
+    0 0 4px currentColor,
+    0 0 6px currentColor;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+}
+
+/* Cyberpunk button effects */
+.theme-neon .cyber-button {
+  background: rgba(0, 255, 255, 0.1);
+  border: 1px solid var(--theme-primary);
+  box-shadow: 
+    0 0 5px rgba(0, 255, 255, 0.15),
+    inset 0 0 5px rgba(0, 255, 255, 0.05);
+  transition: all 0.3s ease;
+}
+
+.theme-neon .cyber-button:hover {
+  background: rgba(0, 255, 255, 0.2);
+  box-shadow: 
+    0 0 10px rgba(0, 255, 255, 0.25),
+    inset 0 0 8px rgba(0, 255, 255, 0.1);
+  transform: translateY(-1px);
+}
+
+/* Cyberpunk border glow */
+.theme-neon .cyber-border {
+  border: 1px solid var(--theme-primary);
+  box-shadow: 
+    0 0 5px rgba(0, 255, 255, 0.15),
+    inset 0 0 3px rgba(0, 255, 255, 0.05);
+}
+
+/* Cyberpunk card effects */
+.theme-neon .cyber-card {
+  background: linear-gradient(145deg, 
+    rgba(0, 0, 0, 0.9), 
+    rgba(10, 10, 15, 0.9)
+  );
+  border: 1px solid rgba(0, 255, 255, 0.3);
+  box-shadow: 
+    0 2px 8px rgba(0, 255, 255, 0.1),
+    inset 0 1px 0 rgba(0, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+}
+
+/* Cyberpunk scan lines effect */
+.theme-neon .cyber-scanlines::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    transparent 50%, 
+    rgba(0, 255, 255, 0.02) 50%
+  );
+  background-size: 100% 4px;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Cyberpunk status indicators */
+.theme-neon .cyber-status-online {
+  background: var(--theme-accent-success);
+  box-shadow: var(--cyber-glow-success);
+  animation: cyber-pulse-green 2s infinite;
+}
+
+.theme-neon .cyber-status-offline {
+  background: var(--theme-accent-error);
+  box-shadow: var(--cyber-glow-secondary);
+  animation: cyber-pulse-pink 2s infinite;
+}
+
+/* Cyberpunk animations */
+@keyframes cyber-pulse-green {
+  0%, 100% { 
+    box-shadow: 0 0 2px #00ff41, 0 0 4px #00ff41, 0 0 6px #00ff41;
+    opacity: 1;
+  }
+  50% { 
+    box-shadow: 0 0 3px #00ff41, 0 0 6px #00ff41, 0 0 10px #00ff41;
+    opacity: 0.8;
+  }
+}
+
+@keyframes cyber-pulse-pink {
+  0%, 100% { 
+    box-shadow: 0 0 2px #ff0080, 0 0 4px #ff0080, 0 0 6px #ff0080;
+    opacity: 1;
+  }
+  50% { 
+    box-shadow: 0 0 3px #ff0080, 0 0 6px #ff0080, 0 0 10px #ff0080;
+    opacity: 0.8;
+  }
+}
+
+@keyframes cyber-flicker {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.95; }
+}
+
+/* Cyberpunk text effects */
+.theme-neon .cyber-flicker {
+  animation: cyber-flicker 3s infinite;
+}
+
+/* Enhanced neon glow for interactive elements */
+.theme-neon .theme-hover:hover {
+  background-color: var(--theme-hover-bg);  
+  box-shadow: 0 0 6px rgba(0, 255, 255, 0.15);
+}
+
+.theme-neon .theme-active:active {
+  background-color: var(--theme-active-bg);
+  box-shadow: 0 0 8px rgba(0, 255, 255, 0.25);
+}
+
+/* Cyberpunk scrollbar */
+.theme-neon ::-webkit-scrollbar {
+  width: 8px;
+  background: rgba(0, 0, 0, 0.3);
+}
+
+.theme-neon ::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #00ffff, #00cccc);
+  border-radius: 4px;
+  box-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+}
+
+.theme-neon ::-webkit-scrollbar-thumb:hover {
+  box-shadow: 0 0 15px rgba(0, 255, 255, 0.8);
+}
+
+/* Cyberpunk input fields */
+.theme-neon input, .theme-neon textarea, .theme-neon select {
+  background: rgba(0, 0, 0, 0.7);
+  border: 1px solid rgba(0, 255, 255, 0.3);
+  color: var(--theme-text-primary);
+  box-shadow: inset 0 0 10px rgba(0, 255, 255, 0.1);
+}
+
+.theme-neon input:focus, .theme-neon textarea:focus, .theme-neon select:focus {
+  border-color: var(--theme-primary);
+  box-shadow: 
+    0 0 15px rgba(0, 255, 255, 0.4),
+    inset 0 0 15px rgba(0, 255, 255, 0.1);
+  outline: none;
+}
+
+/* Cyberpunk text contrast fixes */
+.theme-neon header {
+  background: linear-gradient(135deg, #000000, #0a0a0f, #000000) !important;
+  border-bottom: 2px solid var(--theme-primary) !important;
+  box-shadow: 0 0 8px rgba(0, 255, 255, 0.2) !important;
+}
+
+.theme-neon header h1, 
+.theme-neon header span, 
+.theme-neon header .text-white {
+  color: var(--theme-text-primary) !important;
+  text-shadow: var(--cyber-glow-primary) !important;
+  font-weight: 600 !important;
+}
+
+/* Dark backgrounds for better contrast on cyan elements */
+.theme-neon .bg-\\[var\\(--theme-primary\\)\\],
+.theme-neon .from-\\[var\\(--theme-primary\\)\\] {
+  background: linear-gradient(135deg, #000011, #001122) !important;
+  border: 1px solid var(--theme-primary) !important;
+  box-shadow: 0 0 6px rgba(0, 255, 255, 0.2) !important;
+}
+
+/* Event count and button styling fixes */
+.theme-neon .bg-\\[var\\(--theme-primary-dark\\)\\] {
+  background: rgba(0, 0, 0, 0.8) !important;
+  border: 1px solid var(--theme-primary) !important;
+  box-shadow: 0 0 4px rgba(0, 255, 255, 0.15) !important;
+}
+
+/* Button hover effects */
+.theme-neon button:hover {
+  background: rgba(0, 255, 255, 0.15) !important;
+  box-shadow: 0 0 8px rgba(0, 255, 255, 0.25) !important;
+  transform: translateY(-1px);
+}
+
+/* Timeline and activity styling */
+.theme-neon .bg-\\[var\\(--theme-bg-secondary\\)\\] {
+  background: var(--theme-bg-secondary) !important;
+  position: relative;
+}
+
+.theme-neon .bg-\\[var\\(--theme-bg-secondary\\)\\]::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: var(--cyber-grid-pattern);
+  background-size: var(--cyber-grid-size);
+  opacity: 0.3;
+  pointer-events: none;
+}
+
+/* Badge and pill styling fixes */
+.theme-neon .rounded-full {
+  background: rgba(0, 0, 0, 0.8) !important;
+  border: 1px solid var(--theme-primary) !important;
+  color: var(--theme-text-primary) !important;
+  text-shadow: var(--cyber-glow-primary) !important;
+  box-shadow: 0 0 4px rgba(0, 255, 255, 0.15) !important;
+}
+
+/* Connection status text */
+.theme-neon .text-white {
+  color: var(--theme-text-primary) !important;
+  text-shadow: var(--cyber-glow-primary) !important;
+}
+
+/* Agent activity cards */
+.theme-neon .border-l-4 {
+  background: rgba(0, 0, 0, 0.8) !important;
+  border-left: 4px solid var(--theme-primary) !important;
+  border: 1px solid rgba(0, 255, 255, 0.3) !important;
+  box-shadow: 0 0 15px rgba(0, 255, 255, 0.2) !important;
+}
+
+/* Timeline buttons */
+.theme-neon .rounded-lg {
+  background: rgba(0, 0, 0, 0.7) !important;
+  border: 1px solid var(--theme-primary) !important;
+  color: var(--theme-text-primary) !important;
+  box-shadow: 0 0 10px rgba(0, 255, 255, 0.2) !important;
+}
+
+.theme-neon .rounded-lg:hover {
+  background: rgba(0, 255, 255, 0.1) !important;
+  box-shadow: 0 0 20px rgba(0, 255, 255, 0.4) !important;
+}
+
+/* Status indicators */
+.theme-neon .bg-green-500 {
+  background: var(--theme-accent-success) !important;
+  box-shadow: var(--cyber-glow-success) !important;
+}
+
+.theme-neon .bg-red-500 {
+  background: var(--theme-accent-error) !important;
+  box-shadow: var(--cyber-glow-secondary) !important;
 }
 
 /* Focus ring styles */

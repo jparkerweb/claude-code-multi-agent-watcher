@@ -22,8 +22,9 @@ Before getting started, ensure you have the following installed:
 - **[Astral uv](https://docs.astral.sh/uv/)** - Fast Python package manager (required for hook scripts)
 - **[Bun](https://bun.sh/)** - For running the server
 - **npm** - For running the client (or **yarn** as alternative)
-- **Anthropic API Key** - Set as `ANTHROPIC_API_KEY` environment variable
-- **OpenAI API Key** (optional) - For multi-model support with just-prompt MCP tool
+- **LLM API Keys** (optional) - For AI-powered event summarization:
+  - **Anthropic API Key** - Set as `ANTHROPIC_API_KEY` environment variable
+  - **OpenRouter API Key** (optional) - Set as `OPENROUTER_API_KEY` for alternative models
 
 ### Configure .claude Directory
 
@@ -209,8 +210,8 @@ The hook system intercepts Claude Code lifecycle events:
   - `play_audio.py`: Plays randomized audio notifications from sound files
 
 - **Utility modules**: Enhanced functionality for hooks
-  - `utils/llm/`: LLM integrations for Anthropic Claude and OpenAI GPT
-  - `utils/summarizer.py`: AI-powered event summarization
+  - `utils/llm/`: Multi-provider LLM integrations (Anthropic Claude, OpenRouter)
+  - `utils/summarizer.py`: AI-powered event summarization with provider selection
 
 ### 2. Server (`apps/server/`)
 
@@ -302,6 +303,58 @@ The `UserPromptSubmit` hook captures every user prompt before Claude processes i
 - Summary appears on the right side when AI summarization is enabled
 - Useful for tracking user intentions and conversation flow
 
+## 🤖 AI Summarization
+
+The system supports optional AI-powered event summarization using multiple LLM providers. When enabled with the `--summarize` flag, hooks will generate concise, technical summaries of events.
+
+### Supported Providers
+
+#### 1. Anthropic Claude (Default)
+- **Model**: Claude 3.5 Haiku (fast and efficient)
+- **Configuration**: Set `ANTHROPIC_API_KEY` in your `.env` file
+- **Best for**: High-quality, reliable summarization
+
+#### 2. OpenRouter
+- **Models**: Access to various models (default: Llama 3.2 3B Instruct)
+- **Configuration**: 
+  ```bash
+  OPENROUTER_API_KEY=your_key_here
+  OPENROUTER_MODEL=meta-llama/llama-3.2-3b-instruct  # or any OpenRouter model
+  ACTIVE_SUMMARIZATION_PROVIDER=openrouter
+  ```
+- **Best for**: Cost-effective options, alternative models, experimentation
+
+### Provider Selection
+
+The system automatically selects the LLM provider based on your configuration:
+
+1. **Primary**: Uses the provider specified in `ACTIVE_SUMMARIZATION_PROVIDER`
+2. **Fallback**: If the primary provider fails, falls back to the alternative (if configured)
+3. **Graceful degradation**: Events are still captured even if summarization fails
+
+### Example Summaries
+
+Without summarization:
+```
+PreToolUse: {"tool_name": "Read", "parameters": {"file_path": "/src/config.js"}}
+```
+
+With AI summarization:
+```
+PreToolUse: Reads configuration file from project root
+```
+
+### Usage
+
+Add the `--summarize` flag to any hook in your `.claude/settings.json`:
+
+```json
+{
+  "type": "command",
+  "command": "uv run .claude/hooks/send_event.py --source-app YOUR_APP --event-type PreToolUse --summarize"
+}
+```
+
 ## 🔌 Integration
 
 ### For New Projects
@@ -361,10 +414,13 @@ curl -X POST http://localhost:4000/events \
 Copy `.env.sample` to `.env` in the project root and fill in your API keys:
 
 **Application Root** (`.env` file):
-- `ANTHROPIC_API_KEY` – Anthropic Claude API key (required)
 - `ENGINEER_NAME` – Your name (for logging/identification)
-- `GEMINI_API_KEY` – Google Gemini API key (optional)
-- `OPENAI_API_KEY` – OpenAI API key (optional)
+
+**LLM Provider Configuration (optional - for AI summarization):**
+- `ANTHROPIC_API_KEY` – Anthropic Claude API key 
+- `OPENROUTER_API_KEY` – OpenRouter API key for alternative models
+- `OPENROUTER_MODEL` – Model to use with OpenRouter (default: `meta-llama/llama-3.2-3b-instruct`)
+- `ACTIVE_SUMMARIZATION_PROVIDER` – Choose provider: `anthropic` or `openrouter` (default: `anthropic`)
 
 **Client** (`.env` file in `apps/client/.env`):
 - `VITE_MAX_EVENTS_TO_DISPLAY=100` – Maximum events to show (removes oldest when exceeded)

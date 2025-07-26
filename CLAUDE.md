@@ -78,8 +78,26 @@ Hook configurations are defined in `.claude/settings.json`. Each hook type serve
 
 Key integration points:
 - Hook scripts use `send_event.py` as universal event sender with `--source-app` parameter
-- All hooks support `--summarize` flag for AI-powered event summarization
+- All hooks support `--summarize` flag for AI-powered event summarization using multiple LLM providers
 - Audio notifications are handled via `play_audio.py` with randomized sound files
+
+### AI Summarization Configuration
+
+The system supports multiple LLM providers for event summarization. Configure via environment variables:
+
+**Primary Providers:**
+- **Anthropic Claude**: Set `ANTHROPIC_API_KEY` (default provider)
+- **OpenRouter**: Set `OPENROUTER_API_KEY` and `OPENROUTER_MODEL`
+
+**Provider Selection:**
+- Set `ACTIVE_SUMMARIZATION_PROVIDER=anthropic` or `openrouter`
+- System falls back gracefully if primary provider fails
+- Summarization is optional - events are captured regardless
+
+**LLM Modules:**
+- `utils/llm/anth.py` - Anthropic Claude integration (Haiku 3.5)
+- `utils/llm/openrouter.py` - OpenRouter integration (various models)
+- `utils/summarizer.py` - Provider selection and fallback logic
 
 ## Critical File Structure
 
@@ -89,5 +107,8 @@ apps/server/src/db.ts          # SQLite database layer with migrations
 apps/client/src/App.vue        # Main Vue app with WebSocket management
 .claude/hooks/send_event.py    # Universal event sender for all hook types
 .claude/hooks/utils/           # LLM integrations and summarization utilities
+.claude/hooks/utils/llm/anth.py       # Anthropic Claude API integration
+.claude/hooks/utils/llm/openrouter.py # OpenRouter API integration  
+.claude/hooks/utils/summarizer.py     # Multi-provider LLM selection logic
 .claude/settings.json          # Hook configurations for this project
 ```

@@ -62,7 +62,7 @@ def main():
     try:
         # Randomly choose a file if multiple are provided
         chosen_file = random.choice(args.file)
-        audio_file = project_root / "sounds" / chosen_file
+        audio_file = project_root / ".claude" / "sounds" / chosen_file
         
         if not audio_file.exists():
             print(f"Audio file not found: {audio_file}", file=sys.stderr)

@@ -20,7 +20,6 @@ import argparse
 import urllib.request
 import urllib.error
 from datetime import datetime
-from utils.summarizer import generate_event_summary
 
 def send_event_to_server(event_data, server_url='http://localhost:4000/events'):
     """Send event data to the observability server."""
@@ -97,13 +96,6 @@ def main():
                 event_data['chat'] = chat_data
             except Exception as e:
                 print(f"Failed to read transcript: {e}", file=sys.stderr)
-    
-    # Generate summary if requested
-    if args.summarize:
-        summary = generate_event_summary(event_data)
-        if summary:
-            event_data['summary'] = summary
-        # Continue even if summary generation fails
     
     # Send to server
     success = send_event_to_server(event_data, args.server_url)

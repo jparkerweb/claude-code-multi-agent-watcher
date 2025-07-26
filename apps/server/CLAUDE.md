@@ -13,6 +13,15 @@ Default to using Bun instead of Node.js.
 - Use `bun run <script>` instead of `npm run <script>` or `yarn run <script>` or `pnpm run <script>`
 - Bun automatically loads .env, so don't use dotenv.
 
+## Environment Variables
+
+The server automatically loads environment variables from `.env` in this directory. Supported variables:
+
+- `ANTHROPIC_API_KEY` - Required for AI-powered event summarization
+- `OPENROUTER_API_KEY` - Optional, for alternative LLM models
+- `ACTIVE_SUMMARIZATION_PROVIDER` - Set to 'anthropic' or 'openrouter' (default: 'anthropic')
+- `ENGINEER_NAME` - Optional, for personalized summaries (used 30% of the time when set)
+
 ## APIs
 
 - `Bun.serve()` supports WebSockets, HTTPS, and routes. Don't use `express`.

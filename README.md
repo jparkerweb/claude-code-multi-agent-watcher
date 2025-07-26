@@ -25,6 +25,7 @@ Before getting started, ensure you have the following installed:
 - **LLM API Keys** (optional) - For AI-powered event summarization:
   - **Anthropic API Key** - Set as `ANTHROPIC_API_KEY` environment variable
   - **OpenRouter API Key** (optional) - Set as `OPENROUTER_API_KEY` for alternative models
+  - **Engineer Name** (optional) - Set as `ENGINEER_NAME` for personalized summaries
 
 ### Configure .claude Directory
 

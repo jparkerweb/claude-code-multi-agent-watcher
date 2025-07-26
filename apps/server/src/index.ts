@@ -10,6 +10,7 @@ import {
   importTheme,
   getThemeStats 
 } from './theme';
+import { generateEventSummary } from './summarizer';
 
 // Initialize database
 initDatabase();
@@ -47,6 +48,17 @@ const server = Bun.serve({
             status: 400,
             headers: { ...headers, 'Content-Type': 'application/json' }
           });
+        }
+        
+        // Generate event summary
+        try {
+          const summary = await generateEventSummary(event);
+          if (summary) {
+            event.summary = summary;
+          }
+        } catch (summaryError) {
+          console.warn('Failed to generate event summary:', summaryError);
+          // Continue without summary if generation fails
         }
         
         // Insert event into database

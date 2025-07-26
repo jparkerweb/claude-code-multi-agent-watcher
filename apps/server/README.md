@@ -30,10 +30,10 @@ Create a `.env` file in this directory with the following variables:
 
 ```bash
 # Required for AI-powered event summarization
-ANTHROPIC_API_KEY=your_anthropic_api_key_here
+ANTHROPIC_KEY=your_anthropic_api_key_here
 
 # Optional, for alternative LLM models
-OPENROUTER_API_KEY=your_openrouter_api_key_here
+OPENROUTER_KEY=your_openrouter_api_key_here
 
 # Set to 'anthropic' or 'openrouter' (default: 'anthropic')
 ACTIVE_SUMMARIZATION_PROVIDER=anthropic

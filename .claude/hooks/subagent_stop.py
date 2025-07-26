@@ -25,29 +25,10 @@ except ImportError:
 
 
 def play_subagent_completion_sound():
-    """Play subagent completion sound using audio playback."""
-    try:
-        # Get current script directory and construct play_audio.py path
-        script_dir = Path(__file__).parent
-        play_audio_script = script_dir / "play_audio.py"
-        
-        if not play_audio_script.exists():
-            return  # No audio script available
-        
-        # Call the audio playback script with subagent completion sound
-        subprocess.run([
-            "python", str(play_audio_script), "--file", "subagent_stop.wav"
-        ], 
-        capture_output=True,  # Suppress output
-        timeout=10  # 10-second timeout
-        )
-        
-    except (subprocess.TimeoutExpired, subprocess.SubprocessError, FileNotFoundError):
-        # Fail silently if audio playback encounters issues
-        pass
-    except Exception:
-        # Fail silently for any other errors
-        pass
+    """Audio notifications are now handled client-side in the web application."""
+    # Audio playback functionality has been moved to the client-side web application
+    # No server-side audio playback is performed
+    pass
 
 
 def main():

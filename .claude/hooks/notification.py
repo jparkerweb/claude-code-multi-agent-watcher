@@ -22,11 +22,6 @@ except ImportError:
     pass  # dotenv is optional
 
 
-
-
-# Function removed - audio is played via play_audio.py hook command
-
-
 def main():
     try:
         # Parse command line arguments
@@ -60,8 +55,6 @@ def main():
         # Write back to file with formatting
         with open(log_file, 'w') as f:
             json.dump(log_data, f, indent=2)
-        
-        # Audio is played via separate play_audio.py hook command in settings.json
         
         sys.exit(0)
         

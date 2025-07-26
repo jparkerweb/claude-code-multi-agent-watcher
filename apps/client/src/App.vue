@@ -33,6 +33,15 @@
             {{ events.length }} events
           </span>
           
+          <!-- Sound Toggle Button -->
+          <button
+            @click="toggleSound"
+            class="p-3 mobile:p-1.5 rounded-lg bg-white/20 hover:bg-white/30 transition-all duration-200 border border-white/30 hover:border-white/50 backdrop-blur-sm shadow-lg hover:shadow-xl"
+            :title="isSoundEnabled ? 'Disable sound notifications' : 'Enable sound notifications'"
+          >
+            <span class="text-2xl mobile:text-lg">{{ isSoundEnabled ? '🔊' : '🔇' }}</span>
+          </button>
+          
           <!-- Clear Events Button -->
           <button
             @click="handleClearEvents"
@@ -109,6 +118,7 @@
 import { ref, computed } from 'vue';
 import { useWebSocket } from './composables/useWebSocket';
 import { useThemes } from './composables/useThemes';
+import { useSound } from './composables/useSound';
 import EventTimeline from './components/EventTimeline.vue';
 import FilterPanel from './components/FilterPanel.vue';
 import StickScrollButton from './components/StickScrollButton.vue';
@@ -117,6 +127,9 @@ import ThemeManager from './components/ThemeManager.vue';
 
 // WebSocket connection
 const { events, isConnected, error, clearEvents } = useWebSocket('ws://localhost:4000/stream');
+
+// Sound management
+const { isSoundEnabled, toggleSound } = useSound();
 
 // Theme management
 const { state: themeState } = useThemes();

@@ -10,7 +10,7 @@
           },
           {
             "type": "command",
-            "command": "uv run .claude/hooks/send_event.py --source-app cc-hook-multi-agent-obvs --event-type PreToolUse --summarize"
+            "command": "uv run .claude/hooks/send_event.py --source-app 🕵️_claude-code-multi-agent-watcher --event-type PreToolUse --summarize"
           }
         ]
       }
@@ -25,7 +25,7 @@
           },
           {
             "type": "command",
-            "command": "uv run .claude/hooks/send_event.py --source-app cc-hook-multi-agent-obvs --event-type PostToolUse --summarize"
+            "command": "uv run .claude/hooks/send_event.py --source-app 🕵️_claude-code-multi-agent-watcher --event-type PostToolUse --summarize"
           }
         ]
       }
@@ -40,11 +40,7 @@
           },
           {
             "type": "command",
-            "command": "uv run .claude/hooks/send_event.py --source-app cc-hook-multi-agent-obvs --event-type Notification --summarize"
-          },
-          {
-            "type": "command",
-            "command": "uv run .claude/hooks/play_audio.py --file notification.wav notification2.wav notification3.wav"
+            "command": "uv run .claude/hooks/send_event.py --source-app 🕵️_claude-code-multi-agent-watcher --event-type Notification --summarize"
           }
         ]
       }
@@ -59,11 +55,7 @@
           },
           {
             "type": "command",
-            "command": "uv run .claude/hooks/send_event.py --source-app cc-hook-multi-agent-obvs --event-type Stop --add-chat"
-          },
-          {
-            "type": "command",
-            "command": "uv run .claude/hooks/play_audio.py --file stop.wav stop2.wav stop3.wav"
+            "command": "uv run .claude/hooks/send_event.py --source-app 🕵️_claude-code-multi-agent-watcher --event-type Stop --add-chat"
           }
         ]
       }
@@ -78,7 +70,7 @@
           },
           {
             "type": "command",
-            "command": "uv run .claude/hooks/send_event.py --source-app cc-hook-multi-agent-obvs --event-type SubagentStop"
+            "command": "uv run .claude/hooks/send_event.py --source-app 🕵️_claude-code-multi-agent-watcher --event-type SubagentStop"
           }
         ]
       }
@@ -89,7 +81,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "uv run .claude/hooks/send_event.py --source-app cc-hook-multi-agent-obvs --event-type PreCompact"
+            "command": "uv run .claude/hooks/send_event.py --source-app 🕵️_claude-code-multi-agent-watcher --event-type PreCompact"
           }
         ]
       }
@@ -103,7 +95,7 @@
           },
           {
             "type": "command",
-            "command": "uv run .claude/hooks/send_event.py --source-app cc-hook-multi-agent-obvs --event-type UserPromptSubmit --summarize"
+            "command": "uv run .claude/hooks/send_event.py --source-app 🕵️_claude-code-multi-agent-watcher --event-type UserPromptSubmit --summarize"
           }
         ]
       }

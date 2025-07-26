@@ -35,13 +35,6 @@ def get_completion_messages():
     ]
 
 
-
-
-
-
-# Function removed - audio is played via play_audio.py hook command
-
-
 def main():
     try:
         # Parse command line arguments
@@ -101,8 +94,6 @@ def main():
                         json.dump(chat_data, f, indent=2)
                 except Exception:
                     pass  # Fail silently
-
-        # Audio is played via separate play_audio.py hook command in settings.json
 
         sys.exit(0)
 

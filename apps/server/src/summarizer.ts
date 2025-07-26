@@ -1,5 +1,7 @@
+import 'dotenv/config';
 import Anthropic from '@anthropic-ai/sdk';
 import { createOpenRouter } from '@openrouter/ai-sdk-provider';
+import { generateText } from 'ai';
 
 interface HookEvent {
   id?: number;
@@ -28,9 +30,9 @@ async function getLLMProvider(): Promise<LLMProvider> {
   const provider = process.env.ACTIVE_SUMMARIZATION_PROVIDER?.toLowerCase() || 'anthropic';
   
   if (provider === 'openrouter') {
-    const apiKey = process.env.OPENROUTER_API_KEY;
+    const apiKey = process.env.OPENROUTER_KEY;
     if (!apiKey) {
-      console.warn('OPENROUTER_API_KEY not found in environment variables, falling back to Anthropic');
+      console.warn('OPENROUTER_KEY not found in environment variables, falling back to Anthropic');
       return getAnthropicProvider();
     }
     
@@ -51,13 +53,16 @@ async function getLLMProvider(): Promise<LLMProvider> {
 }
 
 async function getAnthropicProvider(): Promise<AnthropicProvider> {
-  const apiKey = process.env.ANTHROPIC_API_KEY;
+  const apiKey = process.env.ANTHROPIC_KEY;
   if (!apiKey) {
-    throw new Error('ANTHROPIC_API_KEY not found in environment variables');
+    throw new Error('ANTHROPIC_KEY not found in environment variables');
   }
   
+  // Trim any whitespace
+  const trimmedApiKey = apiKey.trim();
+  
   try {
-    const client = new Anthropic({ apiKey });
+    const client = new Anthropic({ apiKey: trimmedApiKey });
     return {
       provider: 'anthropic',
       client,
@@ -112,10 +117,11 @@ Requirements:
     prompt += `\n\nGenerate the summary based on the payload:`;
     
     if (providerResult.provider === 'anthropic') {
+      const anthropicModel = process.env.ANTHROPIC_MODEL || 'claude-3-haiku-20240307';
       const message = await providerResult.client.messages.create({
         max_tokens: 100,
         messages: [{ role: 'user', content: prompt }],
-        model: 'claude-3-haiku-20240307',
+        model: anthropicModel,
       });
       
       if (message.content && message.content.length > 0) {
@@ -133,10 +139,33 @@ Requirements:
           return summary;
         }
       }
-    } else if (providerResult.provider === 'openrouter') {
-      // For OpenRouter, we'll return null for now as we need to implement proper integration
-      // This would require the AI SDK and generateText function
-      console.warn('OpenRouter provider implementation needs AI SDK integration');
+    } else if (providerResult.provider === 'openrouter' && providerResult.client) {
+      try {
+        const openRouterModel = process.env.OPENROUTER_MODEL || 'meta-llama/llama-3.2-3b-instruct';
+        // Type assertion to ensure client is callable
+        const client = providerResult.client as ReturnType<typeof createOpenRouter>;
+        const result = await generateText({
+          model: client(openRouterModel),
+          prompt: prompt,
+          maxTokens: 100,
+        });
+        
+        if (result && result.text) {
+          let summary = result.text.trim();
+          // Clean up the response
+          summary = summary.trim().replace(/^["']|["']$/g, '').replace(/\.$/, '');
+          // Take only the first line if multiple
+          summary = summary.split("\n")[0].trim();
+          // Ensure it's not too long
+          if (summary.length > 100) {
+            summary = summary.substring(0, 97) + "...";
+          }
+          return summary;
+        }
+      } catch (error) {
+        console.error('Error generating summary with OpenRouter:', error);
+        // Fall back to no summary
+      }
       return null;
     }
     

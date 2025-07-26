@@ -72,22 +72,22 @@ Hook configurations are defined in `.claude/settings.json`. Each hook type serve
 
 - **PreToolUse/PostToolUse** - Tool execution monitoring with validation and result capture
 - **UserPromptSubmit** - User input tracking for conversation flow analysis  
-- **Notification** - User interaction events with optional audio alerts
+- **Notification** - User interaction events
 - **Stop/SubagentStop** - Session completion tracking with chat history
 - **PreCompact** - Context compaction monitoring
 
 Key integration points:
 - Hook scripts use `send_event.py` as universal event sender with `--source-app` parameter
 - All hooks support `--summarize` flag for AI-powered event summarization using multiple LLM providers
-- Audio notifications are handled via `play_audio.py` with randomized sound files
+- Audio notifications are handled client-side in the web application
 
 ### AI Summarization Configuration
 
 The system supports multiple LLM providers for event summarization. Configure via environment variables:
 
 **Primary Providers:**
-- **Anthropic Claude**: Set `ANTHROPIC_API_KEY` (default provider)
-- **OpenRouter**: Set `OPENROUTER_API_KEY` and `OPENROUTER_MODEL`
+- **Anthropic Claude**: Set `ANTHROPIC_KEY` (default provider)
+- **OpenRouter**: Set `OPENROUTER_KEY` and `OPENROUTER_MODEL`
 
 **Provider Selection:**
 - Set `ACTIVE_SUMMARIZATION_PROVIDER=anthropic` or `openrouter`
@@ -103,8 +103,8 @@ The system supports multiple LLM providers for event summarization. Configure vi
 
 The system loads environment variables from the server directory (`apps/server/.env`). The following variables are supported:
 
-- `ANTHROPIC_API_KEY` - Required for AI-powered event summarization
-- `OPENROUTER_API_KEY` - Optional, for alternative LLM models
+- `ANTHROPIC_KEY` - Required for AI-powered event summarization
+- `OPENROUTER_KEY` - Optional, for alternative LLM models
 - `ACTIVE_SUMMARIZATION_PROVIDER` - Set to 'anthropic' or 'openrouter' (default: 'anthropic')
 - `ENGINEER_NAME` - Optional, for personalized summaries (used 30% of the time when set)
 
@@ -114,10 +114,10 @@ The system loads environment variables from the server directory (`apps/server/.
 apps/server/src/index.ts       # Main Bun server with WebSocket + HTTP endpoints
 apps/server/src/db.ts          # SQLite database layer with migrations
 apps/client/src/App.vue        # Main Vue app with WebSocket management
+apps/client/src/composables/useSound.ts  # Sound management composable
 .claude/hooks/send_event.py    # Universal event sender for all hook types
 .claude/hooks/utils/           # LLM integrations and summarization utilities
 .claude/hooks/utils/llm/anth.py       # Anthropic Claude API integration
 .claude/hooks/utils/llm/openrouter.py # OpenRouter API integration  
 .claude/hooks/utils/summarizer.py     # Multi-provider LLM selection logic
 .claude/settings.json          # Hook configurations for this project
-```

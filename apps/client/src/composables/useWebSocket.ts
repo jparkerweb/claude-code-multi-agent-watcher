@@ -1,10 +1,14 @@
 import { ref, onMounted, onUnmounted } from 'vue';
 import type { HookEvent, WebSocketMessage } from '../types';
+import { useSound } from './useSound';
 
 export function useWebSocket(url: string) {
   const events = ref<HookEvent[]>([]);
   const isConnected = ref(false);
   const error = ref<string | null>(null);
+  
+  // Sound management
+  const { playSound } = useSound();
   
   let ws: WebSocket | null = null;
   let reconnectTimeout: number | null = null;
@@ -33,6 +37,13 @@ export function useWebSocket(url: string) {
           } else if (message.type === 'event') {
             const newEvent = message.data as HookEvent;
             events.value.push(newEvent);
+            
+            // Play sound for specific events
+            if (newEvent.hook_event_type === 'Notification') {
+              playSound('notification');
+            } else if (newEvent.hook_event_type === 'Stop') {
+              playSound('stop');
+            }
             
             // Limit events array to maxEvents, removing the oldest when exceeded
             if (events.value.length > maxEvents) {

@@ -10,6 +10,8 @@ This system provides complete observability into Claude Code agent behavior by c
 
 ```
 Claude Agents → Hook Scripts → HTTP POST → Bun Server → SQLite → WebSocket → Vue Client
+                              ↑
+                              └── Sound notifications handled client-side
 ```
 
 ![Agent Data Flow Animation](images/AgentDataFlowV2.gif)
@@ -23,8 +25,8 @@ Before getting started, ensure you have the following installed:
 - **[Bun](https://bun.sh/)** - For running the server
 - **npm** - For running the client (or **yarn** as alternative)
 - **LLM API Keys** (optional) - For AI-powered event summarization:
-  - **Anthropic API Key** - Set as `ANTHROPIC_API_KEY` environment variable
-  - **OpenRouter API Key** (optional) - Set as `OPENROUTER_API_KEY` for alternative models
+  - **Anthropic API Key** - Set as `ANTHROPIC_KEY` environment variable
+  - **OpenRouter API Key** (optional) - Set as `OPENROUTER_KEY` for alternative models
   - **Engineer Name** (optional) - Set as `ENGINEER_NAME` for personalized summaries
 
 ### Configure .claude Directory
@@ -239,6 +241,8 @@ Vue 3 application with real-time visualization:
   - Gradient indicators for visual distinction
   - Dark/light theme support
   - Responsive layout with smooth animations
+  - Sound toggle button (🔊/🔇) for audio notifications
+  - Tooltips for enhanced UX
 
 - **Features**:
   - Real-time WebSocket updates
@@ -312,14 +316,14 @@ The system supports optional AI-powered event summarization using multiple LLM p
 
 #### 1. Anthropic Claude (Default)
 - **Model**: Claude 3.5 Haiku (fast and efficient)
-- **Configuration**: Set `ANTHROPIC_API_KEY` in your `.env` file
+- **Configuration**: Set `ANTHROPIC_KEY` in your `.env` file
 - **Best for**: High-quality, reliable summarization
 
 #### 2. OpenRouter
 - **Models**: Access to various models (default: Llama 3.2 3B Instruct)
 - **Configuration**: 
   ```bash
-  OPENROUTER_API_KEY=your_key_here
+  OPENROUTER_KEY=your_key_here
   OPENROUTER_MODEL=meta-llama/llama-3.2-3b-instruct  # or any OpenRouter model
   ACTIVE_SUMMARIZATION_PROVIDER=openrouter
   ```
@@ -345,6 +349,14 @@ With AI summarization:
 PreToolUse: Reads configuration file from project root
 ```
 
+### Sound Notifications
+
+Audio notifications for events are now handled client-side in the web application:
+- **Notification events** play a random notification sound
+- **Stop events** play a random stop sound
+- Toggle button (🔊/🔇) in the UI controls sound playback
+- Sound preference is persisted in localStorage
+
 ### Usage
 
 Add the `--summarize` flag to any hook in your `.claude/settings.json`:
@@ -353,7 +365,6 @@ Add the `--summarize` flag to any hook in your `.claude/settings.json`:
 {
   "type": "command",
   "command": "uv run .claude/hooks/send_event.py --source-app YOUR_APP --event-type PreToolUse --summarize"
-}
 ```
 
 ## 🔌 Integration
@@ -418,8 +429,8 @@ Copy `.env.sample` to `.env` in the project root and fill in your API keys:
 - `ENGINEER_NAME` – Your name (for logging/identification)
 
 **LLM Provider Configuration (optional - for AI summarization):**
-- `ANTHROPIC_API_KEY` – Anthropic Claude API key 
-- `OPENROUTER_API_KEY` – OpenRouter API key for alternative models
+- `ANTHROPIC_KEY` – Anthropic Claude API key 
+- `OPENROUTER_KEY` – OpenRouter API key for alternative models
 - `OPENROUTER_MODEL` – Model to use with OpenRouter (default: `meta-llama/llama-3.2-3b-instruct`)
 - `ACTIVE_SUMMARIZATION_PROVIDER` – Choose provider: `anthropic` or `openrouter` (default: `anthropic`)
 

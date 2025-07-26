@@ -1,6 +1,6 @@
 import Database from 'bun:sqlite';
 
-const db = new Database('agent_events.db');
+const db = new Database('events.db');
 const rows = db.query('SELECT hook_event_type, summary, datetime(timestamp/1000, "unixepoch") as time FROM events WHERE summary IS NOT NULL ORDER BY timestamp DESC LIMIT 10').all();
 
 console.log('Recent events with summaries:');

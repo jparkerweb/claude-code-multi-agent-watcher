@@ -5,8 +5,9 @@
       <div class="px-3 py-4 mobile:py-2 mobile:flex-col mobile:space-y-2 flex items-center justify-between">
         <!-- Title Section -->
         <div class="mobile:w-full mobile:text-center">
-          <h1 class="text-2xl mobile:text-lg font-bold text-white drop-shadow-lg">
-            🕵️ Multi-Agent Observability
+          <h1 class="text-2xl mobile:text-lg font-bold text-white drop-shadow-lg flex items-center space-x-2">
+            <img src="/favicon.png" alt="Multi-Agent Observability" class="w-8 h-8 mr-2">
+            Multi-Agent Observability
           </h1>
         </div>
         

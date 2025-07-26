@@ -33,6 +33,15 @@
             {{ events.length }} events
           </span>
           
+          <!-- Clear Events Button -->
+          <button
+            @click="handleClearEvents"
+            class="p-3 mobile:p-1.5 rounded-lg bg-white/20 hover:bg-red-500/30 transition-all duration-200 border border-white/30 hover:border-red-300/50 backdrop-blur-sm shadow-lg hover:shadow-xl"
+            title="Clear all events"
+          >
+            <span class="text-2xl mobile:text-lg">🗑️</span>
+          </button>
+          
           <!-- Filters Toggle Button -->
           <button
             @click="showFilters = !showFilters"
@@ -107,7 +116,7 @@ import LivePulseChart from './components/LivePulseChart.vue';
 import ThemeManager from './components/ThemeManager.vue';
 
 // WebSocket connection
-const { events, isConnected, error } = useWebSocket('ws://localhost:4000/stream');
+const { events, isConnected, error, clearEvents } = useWebSocket('ws://localhost:4000/stream');
 
 // Theme management
 const { state: themeState } = useThemes();
@@ -130,6 +139,13 @@ const isDark = computed(() => {
          (themeState.value.isCustomTheme && 
           themeState.value.customThemes.find(t => t.id === themeState.value.currentTheme)?.name.includes('dark'));
 });
+
+// Clear events handler
+const handleClearEvents = async () => {
+  if (confirm('Are you sure you want to clear all events? This action cannot be undone.')) {
+    await clearEvents();
+  }
+};
 
 // Debug handler for theme manager
 const handleThemeManagerClick = () => {

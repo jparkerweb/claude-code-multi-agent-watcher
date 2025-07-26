@@ -1,12 +1,10 @@
-# Multi-Agent Observability System
+# 🕵️ Claude Code Multi-Agent Watcher
 
-Real-time monitoring and visualization for Claude Code agents through comprehensive hook event tracking. You can watch the [full breakdown here](https://youtu.be/9ijnN985O_c).
+Real-time monitoring and visualization for Claude Code agents through comprehensive hook event tracking.
 
 ## 🎯 Overview
 
-This system provides complete observability into Claude Code agent behavior by capturing, storing, and visualizing Claude Code [Hook events](https://docs.anthropic.com/en/docs/claude-code/hooks) in real-time. It enables monitoring of multiple concurrent agents with session tracking, event filtering, and live updates. 
-
-<img src="images/app.png" alt="Multi-Agent Observability Dashboard" style="max-width: 800px; width: 100%;">
+This system provides complete observability into Claude Code agent behavior by capturing, storing, and visualizing Claude Code [Hook events](https://docs.anthropic.com/en/docs/claude-code/hooks) in real-time. It enables monitoring of multiple concurrent agents with session tracking, event filtering, live updates, and advanced theming capabilities.
 
 ## 🏗️ Architecture
 
@@ -22,7 +20,8 @@ Before getting started, ensure you have the following installed:
 
 - **[Claude Code](https://docs.anthropic.com/en/docs/claude-code)** - Anthropic's official CLI for Claude
 - **[Astral uv](https://docs.astral.sh/uv/)** - Fast Python package manager (required for hook scripts)
-- **[Bun](https://bun.sh/)**, **npm**, or **yarn** - For running the server and client
+- **[Bun](https://bun.sh/)** - For running the server
+- **npm** - For running the client (or **yarn** as alternative)
 - **Anthropic API Key** - Set as `ANTHROPIC_API_KEY` environment variable
 - **OpenAI API Key** (optional) - For multi-model support with just-prompt MCP tool
 - **ElevenLabs API Key** (optional) - For audio features
@@ -90,10 +89,11 @@ To integrate the observability hooks into your projects:
    
    Replace `YOUR_PROJECT_NAME` with a unique identifier for your project (e.g., `my-api-server`, `react-app`, etc.).
 
-3. **Ensure the observability server is running:**
+3. **Install dependencies and start the observability server:**
    ```bash
    # From the observability project directory (this codebase)
-   ./scripts/start-system.sh
+   npm run install:all              # Install server (Bun) and client (npm) dependencies
+   ./scripts/start-system.sh        # Start both server and client
    ```
 
 Now your project will send events to the observability system whenever Claude Code performs actions.
@@ -103,17 +103,20 @@ Now your project will send events to the observability system whenever Claude Co
 You can quickly view how this works by running this repositories .claude setup.
 
 ```bash
-# 1. Start both server and client
+# 1. Install all dependencies
+npm run install:all
+
+# 2. Start both server and client
 ./scripts/start-system.sh
 
-# 2. Open http://localhost:5173 in your browser
+# 3. Open http://localhost:5173 in your browser
 
-# 3. Open Claude Code and run the following command:
+# 4. Open Claude Code and run the following command:
 Run git ls-files to understand the codebase.
 
-# 4. Watch events stream in the client
+# 5. Watch events stream in the client
 
-# 5. Copy the .claude folder to other projects you want to emit events from.
+# 6. Copy the .claude folder to other projects you want to emit events from.
 cp -R .claude <directory of your codebase you want to emit events from>
 ```
 
@@ -157,10 +160,17 @@ claude-code-hooks-multi-agent-observability/
 │   │   ├── send_event.py  # Universal event sender
 │   │   ├── pre_tool_use.py    # Tool validation & blocking
 │   │   ├── post_tool_use.py   # Result logging
-│   │   ├── notification.py    # User interaction events
+│   │   ├── notification.py    # User interaction events & audio alerts
 │   │   ├── user_prompt_submit.py # User prompt logging & validation
-│   │   ├── stop.py           # Session completion
-│   │   └── subagent_stop.py  # Subagent completion
+│   │   ├── stop.py           # Session completion with chat history
+│   │   ├── subagent_stop.py  # Subagent completion
+│   │   ├── play_audio.py     # Audio notification system
+│   │   ├── utils/           # Utility modules
+│   │   │   ├── llm/        # LLM integrations (Anthropic, OpenAI)
+│   │   │   ├── tts/        # Text-to-speech systems
+│   │   │   └── summarizer.py # AI summarization
+│   │   ├── pyproject.toml  # Python dependencies (uv managed)
+│   │   └── README.md       # Hook system documentation
 │   │
 │   └── settings.json      # Hook configuration
 │
@@ -168,6 +178,16 @@ claude-code-hooks-multi-agent-observability/
 │   ├── start-system.sh   # Launch server & client
 │   ├── reset-system.sh   # Stop all processes
 │   └── test-system.sh    # System validation
+│
+├── sounds/                # Audio notification files
+│   ├── notification.wav   # User interaction sounds
+│   ├── notification2.wav  # Alternative notification sounds
+│   ├── notification3.wav
+│   ├── stop.wav          # Session completion sounds
+│   ├── stop2.wav
+│   └── stop3.wav
+│
+├── package.json          # Root package management with concurrency
 │
 └── logs/                 # Application logs (gitignored)
 ```
@@ -182,16 +202,23 @@ The hook system intercepts Claude Code lifecycle events:
 
 - **`send_event.py`**: Core script that sends event data to the observability server
   - Supports `--add-chat` flag for including conversation history
+  - Supports `--summarize` flag for AI-powered event summarization
   - Validates server connectivity before sending
   - Handles all event types with proper error handling
 
 - **Event-specific hooks**: Each implements validation and data extraction
   - `pre_tool_use.py`: Blocks dangerous commands, validates tool usage
   - `post_tool_use.py`: Captures execution results and outputs
-  - `notification.py`: Tracks user interaction points
+  - `notification.py`: Tracks user interaction points with audio alerts
   - `user_prompt_submit.py`: Logs user prompts, supports validation (v1.0.54+)
   - `stop.py`: Records session completion with optional chat history
   - `subagent_stop.py`: Monitors subagent task completion
+  - `play_audio.py`: Plays randomized audio notifications from sound files
+
+- **Utility modules**: Enhanced functionality for hooks
+  - `utils/llm/`: LLM integrations for Anthropic Claude and OpenAI GPT
+  - `utils/tts/`: Text-to-speech systems (ElevenLabs, OpenAI, pyttsx3)
+  - `utils/summarizer.py`: AI-powered event summarization
 
 ### 2. Server (`apps/server/`)
 
@@ -227,6 +254,9 @@ Vue 3 application with real-time visualization:
   - Chat transcript viewer with syntax highlighting
   - Auto-scroll with manual override
   - Event limiting (configurable via `VITE_MAX_EVENTS_TO_DISPLAY`)
+  - **Advanced theming system** with 20+ predefined themes and custom theme creation
+  - Theme management with import/export capabilities
+  - Real-time theme preview and switching
 
 - **Live Pulse Chart**:
   - Canvas-based real-time visualization
@@ -234,18 +264,31 @@ Vue 3 application with real-time visualization:
   - Event type emojis displayed on bars
   - Smooth animations and glow effects
   - Responsive to filter changes
+  - Theme-aware color adaptation
+
+- **Theming System**:
+  - **20+ predefined themes**: Light, Dark, Modern, Earth, Glass, High Contrast, Dark Blue, Colorblind Friendly, Ocean, Sunset, Forest, Neon, Vintage, Arctic, Lavender, Copper, Midnight, Coral, Slate
+  - **Custom theme creation**: Full color palette customization with validation
+  - **Theme manager**: Visual theme browser with live preview
+  - **Import/Export**: Share themes via JSON export/import
+  - **Accessibility**: High contrast and colorblind-friendly options
+  - **Theme persistence**: Automatic localStorage saving
 
 ## 🔄 Data Flow
 
 1. **Event Generation**: Claude Code executes an action (tool use, notification, etc.)
 2. **Hook Activation**: Corresponding hook script runs based on `settings.json` configuration
 3. **Data Collection**: Hook script gathers context (tool name, inputs, outputs, session ID)
-4. **Transmission**: `send_event.py` sends JSON payload to server via HTTP POST
-5. **Server Processing**:
+4. **Enhanced Processing**: 
+   - AI summarization (optional with `--summarize` flag)
+   - Audio notifications (for user interactions and session completion)
+   - Chat history inclusion (for Stop events)
+5. **Transmission**: `send_event.py` sends JSON payload to server via HTTP POST
+6. **Server Processing**:
    - Validates event structure
    - Stores in SQLite with timestamp
    - Broadcasts to WebSocket clients
-6. **Client Update**: Vue app receives event and updates timeline in real-time
+7. **Client Update**: Vue app receives event and updates timeline in real-time with theme-aware styling
 
 ## 🎨 Event Types & Visualization
 
@@ -354,8 +397,10 @@ Copy `.env.sample` to `.env` in the project root and fill in your API keys:
 
 - **Server**: Bun, TypeScript, SQLite
 - **Client**: Vue 3, TypeScript, Vite, Tailwind CSS
-- **Hooks**: Python 3.8+, Astral uv, TTS (ElevenLabs or OpenAI), LLMs (Claude or OpenAI)
+- **Hooks**: Python 3.13+, Astral uv, TTS (ElevenLabs/OpenAI/pyttsx3), LLMs (Claude/OpenAI)
 - **Communication**: HTTP REST, WebSocket
+- **Audio**: WAV files with randomized playback
+- **Theming**: CSS custom properties with 20+ themes
 
 ## 🔧 Troubleshooting
 
@@ -378,9 +423,20 @@ This command will:
 
 This ensures your hooks work correctly regardless of where Claude Code is executed from.
 
-## Master AI Coding
-> And prepare for Agentic Engineering
+### Audio Not Playing
 
-Learn to code with AI with foundational [Principles of AI Coding](https://agenticengineer.com/principled-ai-coding?y=cchookobvs)
+If audio notifications aren't working:
 
-Follow the [IndyDevDan youtube channel](https://www.youtube.com/@indydevdan) for more AI coding tips and tricks.
+1. **Check sound files**: Ensure WAV files exist in the `sounds/` directory
+2. **Volume settings**: Check system volume and audio output device
+3. **File permissions**: Ensure the hook scripts can access sound files
+4. **Python audio libraries**: Install required audio dependencies via `uv`
+
+### Theme Issues
+
+If custom themes aren't loading or saving:
+
+1. **Browser storage**: Clear localStorage if themes appear corrupted
+2. **Theme validation**: Check console for theme validation errors
+3. **CSS variables**: Ensure custom themes generate valid CSS values
+4. **Import/Export**: Verify JSON structure when importing themes

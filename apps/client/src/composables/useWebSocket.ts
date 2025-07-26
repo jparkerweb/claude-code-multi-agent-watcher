@@ -39,6 +39,8 @@ export function useWebSocket(url: string) {
               // Remove the oldest events (first 10) when limit is exceeded
               events.value = events.value.slice(events.value.length - maxEvents + 10);
             }
+          } else if (message.type === 'clear') {
+            events.value = [];
           }
         } catch (err) {
           console.error('Failed to parse WebSocket message:', err);
@@ -78,6 +80,25 @@ export function useWebSocket(url: string) {
     }
   };
   
+  const clearEvents = async () => {
+    try {
+      const response = await fetch('http://localhost:4000/events', {
+        method: 'DELETE',
+      });
+      
+      if (!response.ok) {
+        throw new Error('Failed to clear events');
+      }
+      
+      // Events will be cleared via WebSocket message
+      return true;
+    } catch (err) {
+      console.error('Failed to clear events:', err);
+      error.value = 'Failed to clear events';
+      return false;
+    }
+  };
+  
   onMounted(() => {
     connect();
   });
@@ -89,6 +110,7 @@ export function useWebSocket(url: string) {
   return {
     events,
     isConnected,
-    error
+    error,
+    clearEvents
   };
 }

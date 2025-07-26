@@ -373,6 +373,416 @@
   --theme-focus-ring: #0088cc;
 }
 
+/* Sunset theme - Warm sunset colors with orange and pink gradients */
+.theme-sunset {
+  /* Primary colors */
+  --theme-primary: #ea580c;
+  --theme-primary-hover: #c2410c;
+  --theme-primary-light: #fed7aa;
+  --theme-primary-dark: #9a3412;
+  
+  /* Background colors */
+  --theme-bg-primary: #fff7ed;
+  --theme-bg-secondary: #ffedd5;
+  --theme-bg-tertiary: #fed7aa;
+  --theme-bg-quaternary: #fdba74;
+  
+  /* Text colors */
+  --theme-text-primary: #431407;
+  --theme-text-secondary: #9a3412;
+  --theme-text-tertiary: #c2410c;
+  --theme-text-quaternary: #ea580c;
+  
+  /* Border colors */
+  --theme-border-primary: #fed7aa;
+  --theme-border-secondary: #fdba74;
+  --theme-border-tertiary: #fb923c;
+  
+  /* Accent colors */
+  --theme-accent-success: #16a34a;
+  --theme-accent-warning: #eab308;
+  --theme-accent-error: #dc2626;
+  --theme-accent-info: #ea580c;
+  
+  /* Shadow colors */
+  --theme-shadow: rgba(234, 88, 12, 0.15);
+  --theme-shadow-lg: rgba(234, 88, 12, 0.3);
+  
+  /* Interactive states */
+  --theme-hover-bg: rgba(234, 88, 12, 0.08);
+  --theme-active-bg: rgba(234, 88, 12, 0.15);
+  --theme-focus-ring: #ea580c;
+}
+
+/* Forest theme - Deep forest greens with natural wood accents */
+.theme-forest {
+  /* Primary colors */
+  --theme-primary: #16a34a;
+  --theme-primary-hover: #15803d;
+  --theme-primary-light: #bbf7d0;
+  --theme-primary-dark: #14532d;
+  
+  /* Background colors */
+  --theme-bg-primary: #f0fdf4;
+  --theme-bg-secondary: #dcfce7;
+  --theme-bg-tertiary: #bbf7d0;
+  --theme-bg-quaternary: #86efac;
+  
+  /* Text colors */
+  --theme-text-primary: #14532d;
+  --theme-text-secondary: #166534;
+  --theme-text-tertiary: #15803d;
+  --theme-text-quaternary: #16a34a;
+  
+  /* Border colors */
+  --theme-border-primary: #bbf7d0;
+  --theme-border-secondary: #86efac;
+  --theme-border-tertiary: #4ade80;
+  
+  /* Accent colors */
+  --theme-accent-success: #22c55e;
+  --theme-accent-warning: #eab308;
+  --theme-accent-error: #dc2626;
+  --theme-accent-info: #16a34a;
+  
+  /* Shadow colors */
+  --theme-shadow: rgba(22, 163, 74, 0.15);
+  --theme-shadow-lg: rgba(22, 163, 74, 0.3);
+  
+  /* Interactive states */
+  --theme-hover-bg: rgba(22, 163, 74, 0.08);
+  --theme-active-bg: rgba(22, 163, 74, 0.15);
+  --theme-focus-ring: #16a34a;
+}
+
+/* Neon theme - Vibrant cyberpunk theme with electric colors */
+.theme-neon {
+  /* Primary colors */
+  --theme-primary: #00ff00;
+  --theme-primary-hover: #00cc00;
+  --theme-primary-light: #80ff80;
+  --theme-primary-dark: #009900;
+  
+  /* Background colors */
+  --theme-bg-primary: #0a0a0a;
+  --theme-bg-secondary: #1a1a1a;
+  --theme-bg-tertiary: #2a2a2a;
+  --theme-bg-quaternary: #3a3a3a;
+  
+  /* Text colors */
+  --theme-text-primary: #00ff00;
+  --theme-text-secondary: #80ff80;
+  --theme-text-tertiary: #ccffcc;
+  --theme-text-quaternary: #e6ffe6;
+  
+  /* Border colors */
+  --theme-border-primary: #00cc00;
+  --theme-border-secondary: #00aa00;
+  --theme-border-tertiary: #008800;
+  
+  /* Accent colors */
+  --theme-accent-success: #00ff80;
+  --theme-accent-warning: #ffff00;
+  --theme-accent-error: #ff0080;
+  --theme-accent-info: #00ffff;
+  
+  /* Shadow colors */
+  --theme-shadow: rgba(0, 255, 0, 0.3);
+  --theme-shadow-lg: rgba(0, 255, 0, 0.5);
+  
+  /* Interactive states */
+  --theme-hover-bg: rgba(0, 255, 0, 0.1);
+  --theme-active-bg: rgba(0, 255, 0, 0.2);
+  --theme-focus-ring: #00ff00;
+}
+
+/* Vintage theme - Retro sepia theme with aged paper appearance */
+.theme-vintage {
+  /* Primary colors */
+  --theme-primary: #8b4513;
+  --theme-primary-hover: #a0522d;
+  --theme-primary-light: #deb887;
+  --theme-primary-dark: #654321;
+  
+  /* Background colors */
+  --theme-bg-primary: #faf0e6;
+  --theme-bg-secondary: #f5f5dc;
+  --theme-bg-tertiary: #f0e68c;
+  --theme-bg-quaternary: #deb887;
+  
+  /* Text colors */
+  --theme-text-primary: #2f1b14;
+  --theme-text-secondary: #654321;
+  --theme-text-tertiary: #8b4513;
+  --theme-text-quaternary: #a0522d;
+  
+  /* Border colors */
+  --theme-border-primary: #deb887;
+  --theme-border-secondary: #d2b48c;
+  --theme-border-tertiary: #bc9a6a;
+  
+  /* Accent colors */
+  --theme-accent-success: #6b8e23;
+  --theme-accent-warning: #ff8c00;
+  --theme-accent-error: #cd5c5c;
+  --theme-accent-info: #4682b4;
+  
+  /* Shadow colors */
+  --theme-shadow: rgba(139, 69, 19, 0.2);
+  --theme-shadow-lg: rgba(139, 69, 19, 0.4);
+  
+  /* Interactive states */
+  --theme-hover-bg: rgba(139, 69, 19, 0.1);
+  --theme-active-bg: rgba(139, 69, 19, 0.2);
+  --theme-focus-ring: #8b4513;
+}
+
+/* Arctic theme - Cool whites and blues inspired by arctic landscapes */
+.theme-arctic {
+  /* Primary colors */
+  --theme-primary: #0369a1;
+  --theme-primary-hover: #0284c7;
+  --theme-primary-light: #e0f2fe;
+  --theme-primary-dark: #164e63;
+  
+  /* Background colors */
+  --theme-bg-primary: #f8fafc;
+  --theme-bg-secondary: #f0f9ff;
+  --theme-bg-tertiary: #e0f2fe;
+  --theme-bg-quaternary: #bae6fd;
+  
+  /* Text colors */
+  --theme-text-primary: #0c4a6e;
+  --theme-text-secondary: #164e63;
+  --theme-text-tertiary: #0369a1;
+  --theme-text-quaternary: #0284c7;
+  
+  /* Border colors */
+  --theme-border-primary: #e0f2fe;
+  --theme-border-secondary: #bae6fd;
+  --theme-border-tertiary: #7dd3fc;
+  
+  /* Accent colors */
+  --theme-accent-success: #059669;
+  --theme-accent-warning: #d97706;
+  --theme-accent-error: #dc2626;
+  --theme-accent-info: #0369a1;
+  
+  /* Shadow colors */
+  --theme-shadow: rgba(3, 105, 161, 0.1);
+  --theme-shadow-lg: rgba(3, 105, 161, 0.25);
+  
+  /* Interactive states */
+  --theme-hover-bg: rgba(3, 105, 161, 0.05);
+  --theme-active-bg: rgba(3, 105, 161, 0.1);
+  --theme-focus-ring: #0369a1;
+}
+
+/* Lavender theme - Soft purple theme with gentle pastel colors */
+.theme-lavender {
+  /* Primary colors */
+  --theme-primary: #9333ea;
+  --theme-primary-hover: #7c3aed;
+  --theme-primary-light: #f3e8ff;
+  --theme-primary-dark: #581c87;
+  
+  /* Background colors */
+  --theme-bg-primary: #fefcff;
+  --theme-bg-secondary: #faf5ff;
+  --theme-bg-tertiary: #f3e8ff;
+  --theme-bg-quaternary: #e9d5ff;
+  
+  /* Text colors */
+  --theme-text-primary: #581c87;
+  --theme-text-secondary: #6b21a8;
+  --theme-text-tertiary: #7c3aed;
+  --theme-text-quaternary: #8b5cf6;
+  
+  /* Border colors */
+  --theme-border-primary: #f3e8ff;
+  --theme-border-secondary: #e9d5ff;
+  --theme-border-tertiary: #d8b4fe;
+  
+  /* Accent colors */
+  --theme-accent-success: #059669;
+  --theme-accent-warning: #d97706;
+  --theme-accent-error: #dc2626;
+  --theme-accent-info: #9333ea;
+  
+  /* Shadow colors */
+  --theme-shadow: rgba(147, 51, 234, 0.1);
+  --theme-shadow-lg: rgba(147, 51, 234, 0.25);
+  
+  /* Interactive states */
+  --theme-hover-bg: rgba(147, 51, 234, 0.05);
+  --theme-active-bg: rgba(147, 51, 234, 0.1);
+  --theme-focus-ring: #9333ea;
+}
+
+/* Copper theme - Industrial theme with copper and bronze tones */
+.theme-copper {
+  /* Primary colors */
+  --theme-primary: #c2410c;
+  --theme-primary-hover: #ea580c;
+  --theme-primary-light: #fed7aa;
+  --theme-primary-dark: #9a3412;
+  
+  /* Background colors */
+  --theme-bg-primary: #fef2f2;
+  --theme-bg-secondary: #fed7aa;
+  --theme-bg-tertiary: #fdba74;
+  --theme-bg-quaternary: #fb923c;
+  
+  /* Text colors */
+  --theme-text-primary: #431407;
+  --theme-text-secondary: #9a3412;
+  --theme-text-tertiary: #c2410c;
+  --theme-text-quaternary: #ea580c;
+  
+  /* Border colors */
+  --theme-border-primary: #fed7aa;
+  --theme-border-secondary: #fdba74;
+  --theme-border-tertiary: #fb923c;
+  
+  /* Accent colors */
+  --theme-accent-success: #16a34a;
+  --theme-accent-warning: #eab308;
+  --theme-accent-error: #dc2626;
+  --theme-accent-info: #c2410c;
+  
+  /* Shadow colors */
+  --theme-shadow: rgba(194, 65, 12, 0.15);
+  --theme-shadow-lg: rgba(194, 65, 12, 0.3);
+  
+  /* Interactive states */
+  --theme-hover-bg: rgba(194, 65, 12, 0.08);
+  --theme-active-bg: rgba(194, 65, 12, 0.15);
+  --theme-focus-ring: #c2410c;
+}
+
+/* Midnight theme - Ultra-dark theme with deep purples and blues */
+.theme-midnight {
+  /* Primary colors */
+  --theme-primary: #4338ca;
+  --theme-primary-hover: #3730a3;
+  --theme-primary-light: #6366f1;
+  --theme-primary-dark: #312e81;
+  
+  /* Background colors */
+  --theme-bg-primary: #0f0f23;
+  --theme-bg-secondary: #1e1e3f;
+  --theme-bg-tertiary: #312e81;
+  --theme-bg-quaternary: #3730a3;
+  
+  /* Text colors */
+  --theme-text-primary: #e0e7ff;
+  --theme-text-secondary: #c7d2fe;
+  --theme-text-tertiary: #a5b4fc;
+  --theme-text-quaternary: #818cf8;
+  
+  /* Border colors */
+  --theme-border-primary: #312e81;
+  --theme-border-secondary: #3730a3;
+  --theme-border-tertiary: #4338ca;
+  
+  /* Accent colors */
+  --theme-accent-success: #16a34a;
+  --theme-accent-warning: #eab308;
+  --theme-accent-error: #dc2626;
+  --theme-accent-info: #4338ca;
+  
+  /* Shadow colors */
+  --theme-shadow: rgba(67, 56, 202, 0.3);
+  --theme-shadow-lg: rgba(67, 56, 202, 0.5);
+  
+  /* Interactive states */
+  --theme-hover-bg: rgba(67, 56, 202, 0.1);
+  --theme-active-bg: rgba(67, 56, 202, 0.2);
+  --theme-focus-ring: #4338ca;
+}
+
+/* Coral theme - Bright coral and teal theme inspired by coral reefs */
+.theme-coral {
+  /* Primary colors */
+  --theme-primary: #ef4444;
+  --theme-primary-hover: #dc2626;
+  --theme-primary-light: #fecaca;
+  --theme-primary-dark: #b91c1c;
+  
+  /* Background colors */
+  --theme-bg-primary: #fffbeb;
+  --theme-bg-secondary: #fef2f2;
+  --theme-bg-tertiary: #fecaca;
+  --theme-bg-quaternary: #fca5a5;
+  
+  /* Text colors */
+  --theme-text-primary: #7f1d1d;
+  --theme-text-secondary: #991b1b;
+  --theme-text-tertiary: #b91c1c;
+  --theme-text-quaternary: #dc2626;
+  
+  /* Border colors */
+  --theme-border-primary: #fecaca;
+  --theme-border-secondary: #fca5a5;
+  --theme-border-tertiary: #f87171;
+  
+  /* Accent colors */
+  --theme-accent-success: #059669;
+  --theme-accent-warning: #eab308;
+  --theme-accent-error: #dc2626;
+  --theme-accent-info: #0891b2;
+  
+  /* Shadow colors */
+  --theme-shadow: rgba(239, 68, 68, 0.15);
+  --theme-shadow-lg: rgba(239, 68, 68, 0.3);
+  
+  /* Interactive states */
+  --theme-hover-bg: rgba(239, 68, 68, 0.08);
+  --theme-active-bg: rgba(239, 68, 68, 0.15);
+  --theme-focus-ring: #ef4444;
+}
+
+/* Slate theme - Professional gray theme with blue-gray accents */
+.theme-slate {
+  /* Primary colors */
+  --theme-primary: #475569;
+  --theme-primary-hover: #334155;
+  --theme-primary-light: #e2e8f0;
+  --theme-primary-dark: #1e293b;
+  
+  /* Background colors */
+  --theme-bg-primary: #f8fafc;
+  --theme-bg-secondary: #f1f5f9;
+  --theme-bg-tertiary: #e2e8f0;
+  --theme-bg-quaternary: #cbd5e1;
+  
+  /* Text colors */
+  --theme-text-primary: #0f172a;
+  --theme-text-secondary: #1e293b;
+  --theme-text-tertiary: #334155;
+  --theme-text-quaternary: #475569;
+  
+  /* Border colors */
+  --theme-border-primary: #e2e8f0;
+  --theme-border-secondary: #cbd5e1;
+  --theme-border-tertiary: #94a3b8;
+  
+  /* Accent colors */
+  --theme-accent-success: #059669;
+  --theme-accent-warning: #eab308;
+  --theme-accent-error: #dc2626;
+  --theme-accent-info: #475569;
+  
+  /* Shadow colors */
+  --theme-shadow: rgba(71, 85, 105, 0.1);
+  --theme-shadow-lg: rgba(71, 85, 105, 0.25);
+  
+  /* Interactive states */
+  --theme-hover-bg: rgba(71, 85, 105, 0.05);
+  --theme-active-bg: rgba(71, 85, 105, 0.1);
+  --theme-focus-ring: #475569;
+}
+
 /* Utility classes for theme variables */
 .theme-bg-primary { background-color: var(--theme-bg-primary); }
 .theme-bg-secondary { background-color: var(--theme-bg-secondary); }

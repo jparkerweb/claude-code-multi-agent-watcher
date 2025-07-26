@@ -9,12 +9,13 @@
 
 import os
 import sys
+from pathlib import Path
 from dotenv import load_dotenv
 
 
 def prompt_llm(prompt_text):
     """
-    Base Anthropic LLM prompting method using fastest model.
+    Prompt Claude using API with Haiku 3.5 model for fast summarization.
 
     Args:
         prompt_text (str): The prompt to send to the model
@@ -22,7 +23,17 @@ def prompt_llm(prompt_text):
     Returns:
         str: The model's response text, or None if error
     """
-    load_dotenv()
+    # Load .env file from project root 
+    try:
+        script_path = Path(__file__)
+        project_root = script_path.parent.parent.parent.parent.parent  # Go up 5 levels
+        env_path = project_root / ".env"
+        load_dotenv(env_path, override=True)
+    except:
+        try:
+            load_dotenv(override=True)
+        except:
+            pass
 
     api_key = os.getenv("ANTHROPIC_API_KEY")
     if not api_key:
@@ -34,7 +45,7 @@ def prompt_llm(prompt_text):
         client = anthropic.Anthropic(api_key=api_key)
 
         message = client.messages.create(
-            model="claude-3-5-haiku-20241022",  # Fastest Anthropic model
+            model="claude-3-5-haiku-20241022",  # Haiku 3.5 - fast and efficient
             max_tokens=100,
             temperature=0.7,
             messages=[{"role": "user", "content": prompt_text}],
@@ -42,7 +53,9 @@ def prompt_llm(prompt_text):
 
         return message.content[0].text.strip()
 
-    except Exception:
+    except Exception as e:
+        if __name__ == "__main__":
+            print(f"Anthropic API Error: {e}", file=sys.stderr)
         return None
 
 
@@ -105,7 +118,7 @@ def main():
             if response:
                 print(response)
             else:
-                print("Error calling Anthropic API")
+                print("Error calling Claude CLI")
     else:
         print("Usage: ./anth.py 'your prompt here' or ./anth.py --completion")
 

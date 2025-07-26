@@ -316,3 +316,9 @@ export function incrementThemeDownloadCount(id: string): boolean {
   const result = stmt.run(id);
   return result.changes > 0;
 }
+
+export function clearAllEvents(): boolean {
+  const stmt = db.prepare('DELETE FROM events');
+  const result = stmt.run();
+  return result.changes > 0;
+}

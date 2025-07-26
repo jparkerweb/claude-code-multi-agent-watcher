@@ -1,4 +1,4 @@
-import { initDatabase, insertEvent, getFilterOptions, getRecentEvents } from './db';
+import { initDatabase, insertEvent, getFilterOptions, getRecentEvents, clearAllEvents } from './db';
 import type { HookEvent } from './types';
 import { 
   createTheme, 
@@ -90,6 +90,33 @@ const server = Bun.serve({
       return new Response(JSON.stringify(events), {
         headers: { ...headers, 'Content-Type': 'application/json' }
       });
+    }
+    
+    // DELETE /events - Clear all events
+    if (url.pathname === '/events' && req.method === 'DELETE') {
+      try {
+        const success = clearAllEvents();
+        
+        // Broadcast clear event to all WebSocket clients
+        const message = JSON.stringify({ type: 'clear' });
+        wsClients.forEach(client => {
+          try {
+            client.send(message);
+          } catch (err) {
+            wsClients.delete(client);
+          }
+        });
+        
+        return new Response(JSON.stringify({ success, message: 'All events cleared' }), {
+          headers: { ...headers, 'Content-Type': 'application/json' }
+        });
+      } catch (error) {
+        console.error('Error clearing events:', error);
+        return new Response(JSON.stringify({ success: false, error: 'Failed to clear events' }), {
+          status: 500,
+          headers: { ...headers, 'Content-Type': 'application/json' }
+        });
+      }
     }
     
     // Theme API endpoints

@@ -85,35 +85,22 @@ export async function generateEventSummary(eventData: HookEvent): Promise<string
       payload_str = payload_str.substring(0, 1000) + '...';
     }
     
-    // 30% of the time, include the engineer name in the prompt if available
-    const engineerName = process.env.ENGINEER_NAME;
-    const useEngineerName = engineerName && Math.random() < 0.3;
-    
-    let prompt = `Generate a one-sentence summary of this Claude Code hook event payload for an engineer monitoring the system.
+    let prompt = `Generate a concise summary of this Claude Code hook event payload for an engineer monitoring the system.
 
 Event Type: ${event_type}
 Payload:
 ${payload_str}
 
 Requirements:
-- ONE sentence only (no period at the end)
+- keep it breif but descriptive
 - Focus on the key action or information in the payload
+- Dont reference the session_id in the summary
 - Be specific and technical
-- Keep under 15 words
 - Use present tense
 - No quotes or formatting
 - Return ONLY the summary text`;
     
-    if (useEngineerName) {
-      prompt += `\n- Personalize the summary for engineer ${engineerName}`;
-    }
-    
     prompt += `\n\nExamples:\n- Reads configuration file from project root\n- Executes npm install to update dependencies\n- Searches web for React documentation\n- Edits database schema to add user table\n- Agent responds with implementation plan`;
-    
-    if (useEngineerName) {
-      prompt += `\n- ${engineerName} reviews the code changes\n- ${engineerName} debugs the authentication issue\n- ${engineerName} implements the new feature`;
-    }
-    
     prompt += `\n\nGenerate the summary based on the payload:`;
     
     if (providerResult.provider === 'anthropic') {
@@ -131,10 +118,10 @@ Requirements:
           // Clean up the response
           summary = summary.trim().replace(/^["']|["']$/g, '').replace(/\.$/, '');
           // Take only the first line if multiple
-          summary = summary.split("\n")[0].trim();
+          // summary = summary.split("\n")[0].trim();
           // Ensure it's not too long
-          if (summary.length > 100) {
-            summary = summary.substring(0, 97) + "...";
+          if (summary.length > 250) {
+            summary = summary.substring(0, 250) + "...";
           }
           return summary;
         }
@@ -155,10 +142,10 @@ Requirements:
           // Clean up the response
           summary = summary.trim().replace(/^["']|["']$/g, '').replace(/\.$/, '');
           // Take only the first line if multiple
-          summary = summary.split("\n")[0].trim();
+          // summary = summary.split("\n")[0].trim();
           // Ensure it's not too long
-          if (summary.length > 100) {
-            summary = summary.substring(0, 97) + "...";
+          if (summary.length > 250) {
+            summary = summary.substring(0, 250) + "...";
           }
           return summary;
         }

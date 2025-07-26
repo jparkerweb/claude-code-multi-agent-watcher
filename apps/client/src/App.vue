@@ -112,6 +112,12 @@
       :is-open="showThemeManager"
       @close="showThemeManager = false"
     />
+    
+    <!-- Welcome Modal -->
+    <WelcomeModal 
+      :show="showWelcomeModal"
+      @accept="handleWelcomeAccept"
+    />
   </div>
 </template>
 
@@ -125,12 +131,13 @@ import FilterPanel from './components/FilterPanel.vue';
 import StickScrollButton from './components/StickScrollButton.vue';
 import LivePulseChart from './components/LivePulseChart.vue';
 import ThemeManager from './components/ThemeManager.vue';
+import WelcomeModal from './components/WelcomeModal.vue';
 
 // WebSocket connection
 const { events, isConnected, error, clearEvents } = useWebSocket('ws://localhost:4000/stream');
 
 // Sound management
-const { isSoundEnabled, toggleSound } = useSound();
+const { isSoundEnabled, hasUserInteracted, toggleSound, markUserInteracted } = useSound();
 
 // Theme management
 const { state: themeState } = useThemes();
@@ -146,6 +153,8 @@ const filters = ref({
 const stickToBottom = ref(true);
 const showThemeManager = ref(false);
 const showFilters = ref(false);
+// Initialize modal state after localStorage is loaded
+const showWelcomeModal = computed(() => !hasUserInteracted.value);
 
 // Computed properties
 const isDark = computed(() => {
@@ -165,5 +174,11 @@ const handleClearEvents = async () => {
 const handleThemeManagerClick = () => {
   console.log('Theme manager button clicked!');
   showThemeManager.value = true;
+};
+
+// Welcome modal handler
+const handleWelcomeAccept = () => {
+  markUserInteracted();
+  showWelcomeModal.value = false;
 };
 </script>

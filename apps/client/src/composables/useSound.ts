@@ -13,6 +13,8 @@ export type SoundEvent = keyof typeof SOUND_FILES;
 export function useSound() {
   // Reactive state for sound enabled
   const isSoundEnabled = ref(true);
+  // Track if user has interacted with the page (for autoplay policy)
+  const hasUserInteracted = ref(false);
   
   // Load sound enabled state from localStorage
   const loadSoundState = () => {
@@ -20,11 +22,36 @@ export function useSound() {
     if (savedState !== null) {
       isSoundEnabled.value = JSON.parse(savedState);
     }
+    
+    // Check if user has previously interacted
+    const interactionState = localStorage.getItem('userHasInteracted');
+    if (interactionState !== null) {
+      hasUserInteracted.value = JSON.parse(interactionState);
+    }
   };
   
   // Save sound enabled state to localStorage
   const saveSoundState = () => {
     localStorage.setItem('soundEnabled', JSON.stringify(isSoundEnabled.value));
+  };
+  
+  // Save user interaction state to localStorage
+  const saveInteractionState = () => {
+    localStorage.setItem('userHasInteracted', JSON.stringify(hasUserInteracted.value));
+  };
+  
+  // Mark that user has interacted (call this after any user action)
+  const markUserInteracted = () => {
+    hasUserInteracted.value = true;
+    saveInteractionState();
+    // Pre-load a silent audio to establish audio context for background playback
+    try {
+      const silentAudio = new Audio();
+      silentAudio.volume = 0.01;
+      silentAudio.play().catch(() => {});
+    } catch (error) {
+      // Ignore errors for silent audio
+    }
   };
   
   // Toggle sound on/off
@@ -35,8 +62,17 @@ export function useSound() {
   
   // Play a sound file
   const playSoundFile = (file: string) => {
+    // Don't attempt to play if user hasn't interacted yet
+    if (!hasUserInteracted.value) {
+      console.log('Skipping sound playback - user has not interacted with page yet');
+      return;
+    }
+    
     try {
       const audio = new Audio(file);
+      // Set volume to ensure it plays even in background
+      audio.volume = 0.7;
+      // Force play even if tab is not focused
       audio.play().catch(error => {
         console.warn(`Failed to play sound ${file}:`, error);
       });
@@ -68,7 +104,9 @@ export function useSound() {
   
   return {
     isSoundEnabled: isSoundEnabled as Ref<boolean>,
+    hasUserInteracted: hasUserInteracted as Ref<boolean>,
     toggleSound,
-    playSound
+    playSound,
+    markUserInteracted
   };
 }

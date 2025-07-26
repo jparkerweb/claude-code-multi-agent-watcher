@@ -1,6 +1,6 @@
 {
     "name": "claude-code-multi-agent-watcher",
-    "version": "1.5.0",
+    "version": "1.6.0",
     "scripts": {
         "install:all": "cd apps/server && bun install && cd ../client && npm install",
         "kill": "npx kill-port 4000 && npx kill-port 5173",

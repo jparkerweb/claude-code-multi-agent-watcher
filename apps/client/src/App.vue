@@ -6,7 +6,7 @@
         <!-- Title Section -->
         <div class="mobile:w-full mobile:text-center">
           <h1 class="text-2xl mobile:text-lg font-bold text-white drop-shadow-lg">
-            Multi-Agent Observability
+            🕵️ Multi-Agent Observability
           </h1>
         </div>
         

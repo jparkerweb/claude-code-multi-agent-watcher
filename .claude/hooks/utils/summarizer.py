@@ -4,12 +4,61 @@
 # dependencies = [
 #     "anthropic",
 #     "python-dotenv",
+#     "requests",
 # ]
 # ///
 
 import json
+import os
 from typing import Optional, Dict, Any
-from .llm.anth import prompt_llm
+from pathlib import Path
+from dotenv import load_dotenv
+
+
+def _get_llm_provider():
+    """
+    Get the appropriate LLM provider based on environment configuration.
+    
+    Returns:
+        function: The prompt_llm function from the selected provider
+    """
+    # Load .env file from project root 
+    try:
+        script_path = Path(__file__)
+        project_root = script_path.parent.parent.parent.parent  # Go up 4 levels
+        env_path = project_root / ".env"
+        load_dotenv(env_path, override=True)
+    except:
+        try:
+            load_dotenv(override=True)
+        except:
+            pass
+    
+    provider = os.getenv("ACTIVE_SUMMARIZATION_PROVIDER", "anthropic").lower()
+    
+    if provider == "openrouter":
+        try:
+            from .llm.openrouter import prompt_llm
+            return prompt_llm
+        except ImportError:
+            # Fall back to anthropic if openrouter import fails
+            try:
+                from .llm.anth import prompt_llm
+                return prompt_llm
+            except ImportError:
+                return None
+    else:
+        # Default to anthropic
+        try:
+            from .llm.anth import prompt_llm
+            return prompt_llm
+        except ImportError:
+            # Try openrouter as fallback
+            try:
+                from .llm.openrouter import prompt_llm
+                return prompt_llm
+            except ImportError:
+                return None
 
 
 def generate_event_summary(event_data: Dict[str, Any]) -> Optional[str]:
@@ -54,6 +103,10 @@ Examples:
 
 Generate the summary based on the payload:"""
 
+    prompt_llm = _get_llm_provider()
+    if not prompt_llm:
+        return None
+        
     summary = prompt_llm(prompt)
 
     # Clean up the response

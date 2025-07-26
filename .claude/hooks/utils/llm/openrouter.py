@@ -2,19 +2,21 @@
 # /// script
 # requires-python = ">=3.8"
 # dependencies = [
-#     "openai",
+#     "requests",
 #     "python-dotenv",
 # ]
 # ///
 
 import os
 import sys
+import json
+from pathlib import Path
 from dotenv import load_dotenv
 
 
 def prompt_llm(prompt_text):
     """
-    Base OpenAI LLM prompting method using fastest model.
+    Prompt OpenRouter API for fast summarization.
 
     Args:
         prompt_text (str): The prompt to send to the model
@@ -22,33 +24,65 @@ def prompt_llm(prompt_text):
     Returns:
         str: The model's response text, or None if error
     """
-    load_dotenv()
+    # Load .env file from project root 
+    try:
+        script_path = Path(__file__)
+        project_root = script_path.parent.parent.parent.parent.parent  # Go up 5 levels
+        env_path = project_root / ".env"
+        load_dotenv(env_path, override=True)
+    except:
+        try:
+            load_dotenv(override=True)
+        except:
+            pass
 
-    api_key = os.getenv("OPENAI_API_KEY")
+    api_key = os.getenv("OPENROUTER_API_KEY")
+    model = os.getenv("OPENROUTER_MODEL", "meta-llama/llama-3.2-3b-instruct")
+    
     if not api_key:
         return None
 
     try:
-        from openai import OpenAI
+        import requests
 
-        client = OpenAI(api_key=api_key)
+        headers = {
+            "Authorization": f"Bearer {api_key}",
+            "Content-Type": "application/json",
+            "HTTP-Referer": "https://github.com/your-repo",  # Required by OpenRouter
+            "X-Title": "Claude Code Multi Agent Watcher"  # Optional but recommended
+        }
 
-        response = client.chat.completions.create(
-            model="gpt-4.1-nano",  # Fastest OpenAI model
-            messages=[{"role": "user", "content": prompt_text}],
-            max_tokens=100,
-            temperature=0.7,
+        data = {
+            "model": model,
+            "messages": [{"role": "user", "content": prompt_text}],
+            "max_tokens": 100,
+            "temperature": 0.7
+        }
+
+        response = requests.post(
+            "https://openrouter.ai/api/v1/chat/completions",
+            headers=headers,
+            json=data,
+            timeout=30
         )
 
-        return response.choices[0].message.content.strip()
+        if response.status_code == 200:
+            result = response.json()
+            return result["choices"][0]["message"]["content"].strip()
+        else:
+            if __name__ == "__main__":
+                print(f"OpenRouter API Error: {response.status_code} - {response.text}", file=sys.stderr)
+            return None
 
-    except Exception:
+    except Exception as e:
+        if __name__ == "__main__":
+            print(f"OpenRouter API Error: {e}", file=sys.stderr)
         return None
 
 
 def generate_completion_message():
     """
-    Generate a completion message using OpenAI LLM.
+    Generate a completion message using OpenRouter LLM.
 
     Returns:
         str: A natural language completion message, or None if error
@@ -64,7 +98,7 @@ def generate_completion_message():
         name_instruction = ""
         examples = """Examples of the style: "Work complete!", "All done!", "Task finished!", "Ready for your next move!" """
 
-    prompt = f"""Generate a short, friendly completion message for when an AI coding assistant finishes a task. 
+    prompt = f"""Generate a short, concise, friendly completion message for when an AI coding assistant finishes a task. 
 
 Requirements:
 - Keep it under 10 words
@@ -105,9 +139,9 @@ def main():
             if response:
                 print(response)
             else:
-                print("Error calling OpenAI API")
+                print("Error calling OpenRouter API")
     else:
-        print("Usage: ./oai.py 'your prompt here' or ./oai.py --completion")
+        print("Usage: ./openrouter.py 'your prompt here' or ./openrouter.py --completion")
 
 
 if __name__ == "__main__":

@@ -4,6 +4,7 @@
 # dependencies = [
 #     "anthropic",
 #     "python-dotenv",
+#     "requests",
 # ]
 # ///
 

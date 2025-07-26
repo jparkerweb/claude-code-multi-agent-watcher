@@ -24,7 +24,6 @@ Before getting started, ensure you have the following installed:
 - **npm** - For running the client (or **yarn** as alternative)
 - **Anthropic API Key** - Set as `ANTHROPIC_API_KEY` environment variable
 - **OpenAI API Key** (optional) - For multi-model support with just-prompt MCP tool
-- **ElevenLabs API Key** (optional) - For audio features
 
 ### Configure .claude Directory
 
@@ -93,7 +92,7 @@ To integrate the observability hooks into your projects:
    ```bash
    # From the observability project directory (this codebase)
    npm run install:all              # Install server (Bun) and client (npm) dependencies
-   ./scripts/start-system.sh        # Start both server and client
+   npm run start                    # Start both server and client
    ```
 
 Now your project will send events to the observability system whenever Claude Code performs actions.
@@ -107,7 +106,7 @@ You can quickly view how this works by running this repositories .claude setup.
 npm run install:all
 
 # 2. Start both server and client
-./scripts/start-system.sh
+npm run start
 
 # 3. Open http://localhost:5173 in your browser
 
@@ -167,17 +166,11 @@ claude-code-hooks-multi-agent-observability/
 │   │   ├── play_audio.py     # Audio notification system
 │   │   ├── utils/           # Utility modules
 │   │   │   ├── llm/        # LLM integrations (Anthropic, OpenAI)
-│   │   │   ├── tts/        # Text-to-speech systems
 │   │   │   └── summarizer.py # AI summarization
 │   │   ├── pyproject.toml  # Python dependencies (uv managed)
 │   │   └── README.md       # Hook system documentation
 │   │
 │   └── settings.json      # Hook configuration
-│
-├── scripts/               # Utility scripts
-│   ├── start-system.sh   # Launch server & client
-│   ├── reset-system.sh   # Stop all processes
-│   └── test-system.sh    # System validation
 │
 ├── sounds/                # Audio notification files
 │   ├── notification.wav   # User interaction sounds
@@ -217,7 +210,6 @@ The hook system intercepts Claude Code lifecycle events:
 
 - **Utility modules**: Enhanced functionality for hooks
   - `utils/llm/`: LLM integrations for Anthropic Claude and OpenAI GPT
-  - `utils/tts/`: Text-to-speech systems (ElevenLabs, OpenAI, pyttsx3)
   - `utils/summarizer.py`: AI-powered event summarization
 
 ### 2. Server (`apps/server/`)
@@ -351,9 +343,6 @@ Already integrated! Hooks run both validation and observability:
 ## 🧪 Testing
 
 ```bash
-# System validation
-./scripts/test-system.sh
-
 # Manual event test
 curl -X POST http://localhost:4000/events \
   -H "Content-Type: application/json" \
@@ -376,7 +365,6 @@ Copy `.env.sample` to `.env` in the project root and fill in your API keys:
 - `ENGINEER_NAME` – Your name (for logging/identification)
 - `GEMINI_API_KEY` – Google Gemini API key (optional)
 - `OPENAI_API_KEY` – OpenAI API key (optional)
-- `ELEVEN_API_KEY` – ElevenLabs API key (optional)
 
 **Client** (`.env` file in `apps/client/.env`):
 - `VITE_MAX_EVENTS_TO_DISPLAY=100` – Maximum events to show (removes oldest when exceeded)
@@ -397,7 +385,7 @@ Copy `.env.sample` to `.env` in the project root and fill in your API keys:
 
 - **Server**: Bun, TypeScript, SQLite
 - **Client**: Vue 3, TypeScript, Vite, Tailwind CSS
-- **Hooks**: Python 3.13+, Astral uv, TTS (ElevenLabs/OpenAI/pyttsx3), LLMs (Claude/OpenAI)
+- **Hooks**: Python 3.13+, Astral uv, LLMs (Claude/OpenAI)
 - **Communication**: HTTP REST, WebSocket
 - **Audio**: WAV files with randomized playback
 - **Theming**: CSS custom properties with 20+ themes

@@ -22,12 +22,7 @@ This is a Multi-Agent Observability System for monitoring Claude Code agents thr
 npm run install:all              # Install server deps (Bun) and client deps (npm)
 
 # Start the complete system
-./scripts/start-system.sh        # Starts both server (port 4000) and client (port 5173)
-./scripts/reset-system.sh        # Stop all processes and cleanup
-./scripts/test-system.sh         # Run system validation tests
-
-# Alternative - Root level commands 
-npm run start                    # Same as start-system.sh using concurrently
+npm run start                    # Starts both server (port 4000) and client (port 5173)
 npm run kill                     # Kill processes on ports 4000 and 5173
 ```
 
@@ -93,7 +88,6 @@ apps/server/src/index.ts       # Main Bun server with WebSocket + HTTP endpoints
 apps/server/src/db.ts          # SQLite database layer with migrations
 apps/client/src/App.vue        # Main Vue app with WebSocket management
 .claude/hooks/send_event.py    # Universal event sender for all hook types
-.claude/hooks/utils/           # LLM integrations, TTS, and summarization utilities
+.claude/hooks/utils/           # LLM integrations and summarization utilities
 .claude/settings.json          # Hook configurations for this project
-scripts/                      # System management scripts (start/stop/test)
 ```

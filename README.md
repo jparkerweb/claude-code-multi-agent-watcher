@@ -55,7 +55,7 @@ To integrate the observability hooks into your projects:
            },
            {
              "type": "command",
-             "command": "uv run .claude/hooks/send_event.py --source-app YOUR_PROJECT_NAME --event-type PreToolUse --summarize"
+             "command": "uv run .claude/hooks/send_event.py --source-app YOUR_PROJECT_NAME --event-type PreToolUse --summarize --server-url http://localhost:7069"
            }
          ]
        }],
@@ -68,7 +68,7 @@ To integrate the observability hooks into your projects:
            },
            {
              "type": "command",
-             "command": "uv run .claude/hooks/send_event.py --source-app YOUR_PROJECT_NAME --event-type PostToolUse --summarize"
+             "command": "uv run .claude/hooks/send_event.py --source-app YOUR_PROJECT_NAME --event-type PostToolUse --summarize --server-url http://localhost:7069"
            }
          ]
        }],
@@ -80,7 +80,7 @@ To integrate the observability hooks into your projects:
            },
            {
              "type": "command",
-             "command": "uv run .claude/hooks/send_event.py --source-app YOUR_PROJECT_NAME --event-type UserPromptSubmit --summarize"
+             "command": "uv run .claude/hooks/send_event.py --source-app YOUR_PROJECT_NAME --event-type UserPromptSubmit --summarize --server-url http://localhost:7069"
            }
          ]
        }]
@@ -98,6 +98,11 @@ To integrate the observability hooks into your projects:
    npm run start                    # Start both server and client
    ```
 
+   **Note**: The system now uses configurable ports:
+   - Server runs on port `7069` by default (configurable via `apps/server/.env`)
+   - Client runs on port `7070` by default (configurable via `apps/client/.env`)
+   - Hook commands automatically use the configured server URL
+
 Now your project will send events to the observability system whenever Claude Code performs actions.
 
 ## 🚀 Quick Start
@@ -111,7 +116,7 @@ npm run install:all
 # 2. Start both server and client
 npm run start
 
-# 3. Open http://localhost:5173 in your browser
+# 3. Open http://localhost:7070 in your browser
 
 # 4. Open Claude Code and run the following command:
 Run git ls-files to understand the codebase.
@@ -363,7 +368,8 @@ Add the `--summarize` flag to any hook in your `.claude/settings.json`:
 ```json
 {
   "type": "command",
-  "command": "uv run .claude/hooks/send_event.py --source-app YOUR_APP --event-type PreToolUse --summarize"
+  "command": "uv run .claude/hooks/send_event.py --source-app YOUR_APP --event-type PreToolUse --summarize --server-url http://localhost:7069"
+}
 ```
 
 ## 🔌 Integration
@@ -383,7 +389,7 @@ Add the `--summarize` flag to any hook in your `.claude/settings.json`:
          "matcher": ".*",
          "hooks": [{
            "type": "command",
-           "command": "uv run .claude/hooks/send_event.py --source-app YOUR_APP --event-type PreToolUse"
+           "command": "uv run .claude/hooks/send_event.py --source-app YOUR_APP --event-type PreToolUse --server-url http://localhost:7069"
          }]
        }]
      }
@@ -400,15 +406,15 @@ Already integrated! Hooks run both validation and observability:
 },
 {
   "type": "command", 
-  "command": "uv run .claude/hooks/send_event.py --source-app cc-hooks-observability --event-type PreToolUse"
+  "command": "uv run .claude/hooks/send_event.py --source-app cc-hooks-observability --event-type PreToolUse --server-url http://localhost:7069"
 }
 ```
 
 ## 🧪 Testing
 
 ```bash
-# Manual event test
-curl -X POST http://localhost:4000/events \
+# Manual event test (note the updated port)
+curl -X POST http://localhost:7069/events \
   -H "Content-Type: application/json" \
   -d '{
     "source_app": "test",
@@ -422,37 +428,38 @@ curl -X POST http://localhost:4000/events \
 
 ### Environment Variables
 
-Copy `.env.sample` to `.env` in the project root and fill in your API keys:
+**Server Configuration** (`apps/server/.env`):
+```bash
+# Server port (default: 7069)
+PORT=7069
 
-**LLM Provider Configuration (optional - for AI summarization):**
-- `ANTHROPIC_KEY` – Anthropic Claude API key 
-- `OPENROUTER_KEY` – OpenRouter API key for alternative models
-- `OPENROUTER_MODEL` – Model to use with OpenRouter (default: `meta-llama/llama-3.2-3b-instruct`)
-- `ACTIVE_SUMMARIZATION_PROVIDER` – Choose provider: `anthropic` or `openrouter` (default: `anthropic`)
+# AI Summarization (optional)
+ANTHROPIC_KEY=your_anthropic_api_key_here
+OPENROUTER_KEY=your_openrouter_api_key_here
+OPENROUTER_MODEL=meta-llama/llama-3.2-3b-instruct
+ACTIVE_SUMMARIZATION_PROVIDER=anthropic
+```
 
-**Client** (`.env` file in `apps/client/.env`):
-- `VITE_MAX_EVENTS_TO_DISPLAY=100` – Maximum events to show (removes oldest when exceeded)
+**Client Configuration** (`apps/client/.env`):
+```bash
+# Client development server port (default: 7070)
+PORT=7070
+
+# Server URL for API calls and WebSocket connections
+VITE_SERVER_URL=http://localhost:7069
+
+# Maximum events to display in the client
+VITE_MAX_EVENTS_TO_DISPLAY=100
+```
+
+**Claude Hooks Configuration** (`.claude/settings.json`):
+The hook commands now include explicit server URLs. All `send_event.py` calls include `--server-url http://localhost:7069` to ensure proper communication with the observability server.
 
 ### Server Ports
 
-- Server: `4000` (HTTP/WebSocket)
-- Client: `5173` (Vite dev server)
-
-## 🛡️ Security Features
-
-- Blocks dangerous commands (`rm -rf`, etc.)
-- Prevents access to sensitive files (`.env`, private keys)
-- Validates all inputs before execution
-- No external dependencies for core functionality
-
-## 📊 Technical Stack
-
-- **Server**: Bun, TypeScript, SQLite
-- **Client**: Vue 3, TypeScript, Vite, Tailwind CSS
-- **Hooks**: Python 3.13+, Astral uv, LLMs (Claude/OpenAI)
-- **Communication**: HTTP REST, WebSocket
-- **Audio**: WAV files with randomized playback
-- **Theming**: CSS custom properties with 20+ themes
+- **Server**: `7069` (HTTP/WebSocket) - configurable via `apps/server/.env`
+- **Client**: `7070` (Vite dev server) - configurable via `apps/client/.env`
+- **Legacy ports** (`4000`/`5173`) have been replaced with the new configurable system
 
 ## 🔧 Troubleshooting
 

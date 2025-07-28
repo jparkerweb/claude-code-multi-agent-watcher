@@ -98,6 +98,7 @@ Requirements:
 - Be specific and technical
 - Use present tense
 - No quotes or formatting
+- Start each summary with a verb if possible
 - Return ONLY the summary text`;
     
     prompt += `\n\nExamples:\n- Reads configuration file from project root\n- Executes npm install to update dependencies\n- Searches web for React documentation\n- Edits database schema to add user table\n- Agent responds with implementation plan`;

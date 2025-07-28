@@ -60,6 +60,17 @@
             <span class="mr-1.5 text-base">{{ hookEmoji }}</span>
             {{ event.hook_event_type }}
           </span>
+          <!-- Chat transcript button - Desktop -->
+          <button
+            v-if="event.chat && event.chat.length > 0"
+            @click.stop="showChatModal = true"
+            class="px-3 py-1 font-bold rounded-lg transition-all duration-200 flex items-center space-x-1 shadow-md hover:shadow-lg bg-gradient-to-r from-[var(--theme-primary)] to-[var(--theme-primary-light)] hover:from-[var(--theme-primary-dark)] hover:to-[var(--theme-primary)] text-white border border-[var(--theme-primary-dark)] transform hover:scale-105"
+          >
+            <span class="text-sm">💬</span>
+            <span class="text-xs font-bold drop-shadow-sm">
+              {{ event.chat.length }}
+            </span>
+          </button>
         </div>
         <span class="text-sm text-[var(--theme-text-tertiary)] font-semibold">
           {{ formatTime(event.timestamp) }}
@@ -96,6 +107,25 @@
           </span>
         </div>
       </div>
+
+      <!-- Chat transcript button - Always visible when chat exists -->
+      <div v-if="event.chat && event.chat.length > 0" class="flex justify-end mt-2">
+        <button
+          @click.stop="!isMobile && (showChatModal = true)"
+          :class="[
+            'px-3 py-1.5 mobile:px-2 mobile:py-1 font-bold rounded-lg transition-all duration-200 flex items-center space-x-1.5 shadow-md hover:shadow-lg text-sm mobile:text-xs',
+            isMobile 
+              ? 'bg-[var(--theme-bg-quaternary)] cursor-not-allowed opacity-50 text-[var(--theme-text-quaternary)] border border-[var(--theme-border-tertiary)]' 
+              : 'bg-gradient-to-r from-[var(--theme-primary)] to-[var(--theme-primary-light)] hover:from-[var(--theme-primary-dark)] hover:to-[var(--theme-primary)] text-white border border-[var(--theme-primary-dark)] transform hover:scale-105'
+          ]"
+          :disabled="isMobile"
+        >
+          <span class="text-sm mobile:text-xs">💬</span>
+          <span class="font-bold drop-shadow-sm">
+            {{ isMobile ? 'Chat (mobile N/A)' : `Chat Transcript (${event.chat.length})` }}
+          </span>
+        </button>
+      </div>
       
       <!-- Expanded content -->
       <div v-if="isExpanded" class="mt-2 pt-2 border-t-2 border-[var(--theme-primary)] bg-gradient-to-r from-[var(--theme-bg-primary)] to-[var(--theme-bg-secondary)] rounded-b-lg p-3 space-y-3">
@@ -115,25 +145,6 @@
           </div>
           <pre class="text-sm mobile:text-xs text-[var(--theme-text-primary)] bg-[var(--theme-bg-tertiary)] p-3 mobile:p-2 rounded-lg overflow-x-auto max-h-64 overflow-y-auto font-mono border border-[var(--theme-primary)]/30 shadow-md hover:shadow-lg transition-shadow duration-200">{{ formattedPayload }}</pre>
         </div>
-      </div>
-
-      <!-- Chat transcript button -->
-      <div v-if="event.chat && event.chat.length > 0" class="flex justify-end">
-        <button
-          @click.stop="!isMobile && (showChatModal = true)"
-          :class="[
-            'px-4 py-2 mobile:px-3 mobile:py-1.5 font-bold rounded-lg transition-all duration-200 flex items-center space-x-1.5 shadow-md hover:shadow-lg',
-            isMobile 
-              ? 'bg-[var(--theme-bg-quaternary)] cursor-not-allowed opacity-50 text-[var(--theme-text-quaternary)] border border-[var(--theme-border-tertiary)]' 
-              : 'bg-gradient-to-r from-[var(--theme-primary)] to-[var(--theme-primary-light)] hover:from-[var(--theme-primary-dark)] hover:to-[var(--theme-primary)] text-white border border-[var(--theme-primary-dark)] transform hover:scale-105'
-          ]"
-          :disabled="isMobile"
-        >
-          <span class="text-base mobile:text-sm">💬</span>
-          <span class="text-sm mobile:text-xs font-bold drop-shadow-sm">
-            {{ isMobile ? 'Not available in mobile' : `View Chat Transcript (${event.chat.length} messages)` }}
-          </span>
-        </button>
       </div>
 
     </div>

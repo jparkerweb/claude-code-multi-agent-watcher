@@ -2,19 +2,19 @@ import { ref, type Ref } from 'vue';
 
 // Define the sound files for different events
 const SOUND_FILES = {
-  notification: ['/sounds/notification.wav', '/sounds/notification2.wav', '/sounds/notification3.wav'],
-  stop: ['/sounds/stop.wav', '/sounds/stop2.wav', '/sounds/stop3.wav']
+  notification: ['/sounds/notification.wav', '/sounds/notification2.wav', '/sounds/notification3.wav', '/sounds/notification4.wav', '/sounds/notification5.wav', '/sounds/notification6.wav'],
+  stop: ['/sounds/stop.wav', '/sounds/stop2.wav', '/sounds/stop3.wav', '/sounds/stop4.wav', '/sounds/stop5.wav', '/sounds/stop6.wav']
 };
 
 // Type for sound events
 export type SoundEvent = keyof typeof SOUND_FILES;
 
+// Global reactive state (shared across all instances)
+const isSoundEnabled = ref(true);
+const hasUserInteracted = ref(false);
+
 // Composable for sound management
 export function useSound() {
-  // Reactive state for sound enabled
-  const isSoundEnabled = ref(true);
-  // Track if user has interacted with the page (for autoplay policy)
-  const hasUserInteracted = ref(false);
   
   // Load sound enabled state from localStorage
   const loadSoundState = () => {

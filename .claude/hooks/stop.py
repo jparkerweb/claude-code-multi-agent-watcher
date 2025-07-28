@@ -12,9 +12,10 @@ import os
 import sys
 import random
 import subprocess
+import shutil
 from pathlib import Path
-from datetime import datetime
-from utils.constants import ensure_session_log_dir
+from datetime import datetime, timedelta
+from utils.constants import ensure_session_log_dir, LOG_BASE_DIR
 
 try:
     from dotenv import load_dotenv
@@ -22,6 +23,29 @@ try:
     load_dotenv()
 except ImportError:
     pass  # dotenv is optional
+
+
+def cleanup_old_logs(hours_to_keep=6):
+    """Remove log directories older than specified hours."""
+    try:
+        log_base_path = Path(LOG_BASE_DIR)
+        if not log_base_path.exists():
+            return
+        
+        cutoff_time = datetime.now() - timedelta(hours=hours_to_keep)
+        cutoff_timestamp = cutoff_time.timestamp()
+        
+        for session_dir in log_base_path.iterdir():
+            if session_dir.is_dir():
+                # Check directory modification time
+                dir_mtime = session_dir.stat().st_mtime
+                if dir_mtime < cutoff_timestamp:
+                    try:
+                        shutil.rmtree(session_dir)
+                    except Exception:
+                        pass  # Fail silently if we can't remove a directory
+    except Exception:
+        pass  # Fail silently on any cleanup errors
 
 
 def get_completion_messages():
@@ -94,6 +118,9 @@ def main():
                         json.dump(chat_data, f, indent=2)
                 except Exception:
                     pass  # Fail silently
+
+        # Cleanup old logs (older than 6 hours)
+        cleanup_old_logs(6)
 
         sys.exit(0)
 

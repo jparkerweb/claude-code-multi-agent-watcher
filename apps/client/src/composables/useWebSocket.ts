@@ -63,15 +63,18 @@ export function useWebSocket(url: string) {
         error.value = 'WebSocket connection error';
       };
       
-      ws.onclose = () => {
-        console.log('WebSocket disconnected');
+      ws.onclose = (event) => {
+        console.log('WebSocket disconnected', event.code, event.reason);
         isConnected.value = false;
         
-        // Attempt to reconnect after 3 seconds
-        reconnectTimeout = window.setTimeout(() => {
-          console.log('Attempting to reconnect...');
-          connect();
-        }, 3000);
+        // Only attempt to reconnect if it wasn't a clean close (code 1000)
+        // and we're not intentionally disconnecting
+        if (event.code !== 1000 && ws !== null) {
+          reconnectTimeout = window.setTimeout(() => {
+            console.log('Attempting to reconnect...');
+            connect();
+          }, 3000);
+        }
       };
     } catch (err) {
       console.error('Failed to connect:', err);
@@ -86,9 +89,22 @@ export function useWebSocket(url: string) {
     }
     
     if (ws) {
-      ws.close();
+      // Remove all event listeners before closing
+      ws.onopen = null;
+      ws.onmessage = null;
+      ws.onerror = null;
+      ws.onclose = null;
+      
+      // Close connection if not already closed
+      if (ws.readyState === WebSocket.OPEN || ws.readyState === WebSocket.CONNECTING) {
+        ws.close(1000, 'Component unmounting');
+      }
       ws = null;
     }
+    
+    // Reset state
+    isConnected.value = false;
+    error.value = null;
   };
   
   const clearEvents = async () => {

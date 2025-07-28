@@ -1,3 +1,4 @@
+import 'dotenv/config';
 import { initDatabase, insertEvent, getFilterOptions, getRecentEvents, clearAllEvents } from './db';
 import type { HookEvent } from './types';
 import { 
@@ -20,7 +21,7 @@ const wsClients = new Set<any>();
 
 // Create Bun server with HTTP and WebSocket support
 const server = Bun.serve({
-  port: 4000,
+  port: parseInt(process.env.PORT || '7069'),
   
   async fetch(req: Request) {
     const url = new URL(req.url);

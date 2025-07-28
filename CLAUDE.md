@@ -106,7 +106,6 @@ The system loads environment variables from the server directory (`apps/server/.
 - `ANTHROPIC_KEY` - Required for AI-powered event summarization
 - `OPENROUTER_KEY` - Optional, for alternative LLM models
 - `ACTIVE_SUMMARIZATION_PROVIDER` - Set to 'anthropic' or 'openrouter' (default: 'anthropic')
-- `ENGINEER_NAME` - Optional, for personalized summaries (used 30% of the time when set)
 
 ## Critical File Structure
 

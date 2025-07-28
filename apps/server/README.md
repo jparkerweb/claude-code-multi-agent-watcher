@@ -37,9 +37,6 @@ OPENROUTER_KEY=your_openrouter_api_key_here
 
 # Set to 'anthropic' or 'openrouter' (default: 'anthropic')
 ACTIVE_SUMMARIZATION_PROVIDER=anthropic
-
-# Optional, for personalized summaries (used 30% of the time when set)
-ENGINEER_NAME=YourName
 ```
 
 ## Features

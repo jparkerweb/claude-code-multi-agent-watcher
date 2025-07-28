@@ -134,7 +134,7 @@ import ThemeManager from './components/ThemeManager.vue';
 import WelcomeModal from './components/WelcomeModal.vue';
 
 // WebSocket connection
-const { events, isConnected, error, clearEvents } = useWebSocket('ws://localhost:4000/stream');
+const { events, isConnected, error, clearEvents } = useWebSocket(`${import.meta.env.VITE_SERVER_URL?.replace('http', 'ws') || 'ws://localhost:7069'}/stream`);
 
 // Sound management
 const { isSoundEnabled, hasUserInteracted, toggleSound, markUserInteracted } = useSound();

@@ -27,7 +27,6 @@ Before getting started, ensure you have the following installed:
 - **LLM API Keys** (optional) - For AI-powered event summarization:
   - **Anthropic API Key** - Set as `ANTHROPIC_KEY` environment variable
   - **OpenRouter API Key** (optional) - Set as `OPENROUTER_KEY` for alternative models
-  - **Engineer Name** (optional) - Set as `ENGINEER_NAME` for personalized summaries
 
 ### Configure .claude Directory
 
@@ -424,9 +423,6 @@ curl -X POST http://localhost:4000/events \
 ### Environment Variables
 
 Copy `.env.sample` to `.env` in the project root and fill in your API keys:
-
-**Application Root** (`.env` file):
-- `ENGINEER_NAME` – Your name (for logging/identification)
 
 **LLM Provider Configuration (optional - for AI summarization):**
 - `ANTHROPIC_KEY` – Anthropic Claude API key 

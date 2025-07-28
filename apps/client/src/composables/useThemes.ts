@@ -865,7 +865,7 @@ export function useThemes() {
 
   // Server API functions
   const saveThemeToServer = async (theme: CustomTheme): Promise<void> => {
-    const response = await fetch('http://localhost:4000/api/themes', {
+    const response = await fetch(`${import.meta.env.VITE_SERVER_URL || 'http://localhost:7069'}/api/themes`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(theme)
@@ -879,7 +879,7 @@ export function useThemes() {
 
   const loadThemesFromServer = async (): Promise<CustomTheme[]> => {
     try {
-      const response = await fetch('http://localhost:4000/api/themes?isPublic=true');
+      const response = await fetch(`${import.meta.env.VITE_SERVER_URL || 'http://localhost:7069'}/api/themes?isPublic=true`);
       if (!response.ok) return [];
       
       const result: ThemeApiResponse<CustomTheme[]> = await response.json();

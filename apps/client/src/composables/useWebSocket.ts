@@ -109,7 +109,7 @@ export function useWebSocket(url: string) {
   
   const clearEvents = async () => {
     try {
-      const response = await fetch('http://localhost:4000/events', {
+      const response = await fetch(`${import.meta.env.VITE_SERVER_URL || 'http://localhost:7069'}/events`, {
         method: 'DELETE',
       });
       

@@ -103,7 +103,7 @@ const clearFilters = () => {
 
 const fetchFilterOptions = async () => {
   try {
-    const response = await fetch('http://localhost:4000/events/filter-options');
+    const response = await fetch(`${import.meta.env.VITE_SERVER_URL || 'http://localhost:7069'}/events/filter-options`);
     if (response.ok) {
       filterOptions.value = await response.json();
     }

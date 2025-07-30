@@ -39,57 +39,20 @@ To integrate the observability hooks into your projects:
    cp -R .claude /path/to/your/project/
    ```
 
-2. **Update the `settings.json` configuration:**
+2. **Update the centralized configuration:**
    
-   Open `.claude/settings.json` in your project and modify the `source-app` parameter to identify your project:
+   Open `.claude/hooks/config.json` in your project and modify the settings to identify your project:
    
    ```json
    {
-     "hooks": {
-       "PreToolUse": [{
-         "matcher": "",
-         "hooks": [
-           {
-             "type": "command",
-             "command": "uv run .claude/hooks/pre_tool_use.py"
-           },
-           {
-             "type": "command",
-             "command": "uv run .claude/hooks/send_event.py --source-app YOUR_PROJECT_NAME --event-type PreToolUse --summarize --server-url http://localhost:7069"
-           }
-         ]
-       }],
-       "PostToolUse": [{
-         "matcher": "",
-         "hooks": [
-           {
-             "type": "command",
-             "command": "uv run .claude/hooks/post_tool_use.py"
-           },
-           {
-             "type": "command",
-             "command": "uv run .claude/hooks/send_event.py --source-app YOUR_PROJECT_NAME --event-type PostToolUse --summarize --server-url http://localhost:7069"
-           }
-         ]
-       }],
-       "UserPromptSubmit": [{
-         "hooks": [
-           {
-             "type": "command",
-             "command": "uv run .claude/hooks/user_prompt_submit.py --log-only"
-           },
-           {
-             "type": "command",
-             "command": "uv run .claude/hooks/send_event.py --source-app YOUR_PROJECT_NAME --event-type UserPromptSubmit --summarize --server-url http://localhost:7069"
-           }
-         ]
-       }]
-       // ... (similar patterns for Notification, Stop, SubagentStop, PreCompact)
-     }
+     "server_url": "http://localhost:7069/events",
+     "source_app": "YOUR_PROJECT_NAME"
    }
    ```
    
    Replace `YOUR_PROJECT_NAME` with a unique identifier for your project (e.g., `my-api-server`, `react-app`, etc.).
+
+   **That's it!** The `.claude/settings.json` file is already configured to use the centralized config - no need to modify it.
 
 3. **Install dependencies and start the observability server:**
    ```bash
@@ -100,8 +63,8 @@ To integrate the observability hooks into your projects:
 
    **Note**: The system now uses configurable ports:
    - Server runs on port `7069` by default (configurable via `apps/server/.env`)
-   - Client runs on port `7070` by default (configurable via `apps/client/.env`)
-   - Hook commands automatically use the configured server URL
+   - Client runs on port `5173` by default (configurable via `apps/client/.env`)
+   - Hook commands automatically use the configured server URL from `config.json`
 
 Now your project will send events to the observability system whenever Claude Code performs actions.
 
@@ -116,7 +79,7 @@ npm run install:all
 # 2. Start both server and client
 npm run start
 
-# 3. Open http://localhost:7070 in your browser
+# 3. Open http://localhost:5173 in your browser
 
 # 4. Open Claude Code and run the following command:
 Run git ls-files to understand the codebase.
@@ -165,6 +128,7 @@ claude-code-hooks-multi-agent-observability/
 ├── .claude/                # Claude Code integration
 │   ├── hooks/             # Hook scripts (Python with uv)
 │   │   ├── send_event.py  # Universal event sender
+│   │   ├── config.json    # Centralized hook configuration (server URL, source app)
 │   │   ├── pre_tool_use.py    # Tool validation & blocking
 │   │   ├── post_tool_use.py   # Result logging
 │   │   ├── notification.py    # User interaction events & audio alerts
@@ -178,7 +142,7 @@ claude-code-hooks-multi-agent-observability/
 │   │   ├── pyproject.toml  # Python dependencies (uv managed)
 │   │   └── README.md       # Hook system documentation
 │   │
-│   └── settings.json      # Hook configuration
+│   └── settings.json      # Hook event triggers and command definitions
 │
 ├── sounds/                # Audio notification files
 │   ├── notification.wav   # User interaction sounds
@@ -202,6 +166,7 @@ claude-code-hooks-multi-agent-observability/
 The hook system intercepts Claude Code lifecycle events:
 
 - **`send_event.py`**: Core script that sends event data to the observability server
+  - Automatically loads configuration from `.claude/hooks/config.json`
   - Supports `--add-chat` flag for including conversation history
   - Supports `--summarize` flag for AI-powered event summarization
   - Validates server connectivity before sending
@@ -368,33 +333,30 @@ Add the `--summarize` flag to any hook in your `.claude/settings.json`:
 ```json
 {
   "type": "command",
-  "command": "uv run .claude/hooks/send_event.py --source-app YOUR_APP --event-type PreToolUse --summarize --server-url http://localhost:7069"
+  "command": "uv run .claude/hooks/send_event.py --event-type PreToolUse --summarize"
 }
 ```
+
+The server URL and source app are automatically loaded from `.claude/hooks/config.json`.
 
 ## 🔌 Integration
 
 ### For New Projects
 
-1. Copy the event sender:
+1. Copy the entire `.claude` directory:
    ```bash
-   cp .claude/hooks/send_event.py YOUR_PROJECT/.claude/hooks/
+   cp -R .claude YOUR_PROJECT/
    ```
 
-2. Add to your `.claude/settings.json`:
+2. Update the configuration in `YOUR_PROJECT/.claude/hooks/config.json`:
    ```json
    {
-     "hooks": {
-       "PreToolUse": [{
-         "matcher": ".*",
-         "hooks": [{
-           "type": "command",
-           "command": "uv run .claude/hooks/send_event.py --source-app YOUR_APP --event-type PreToolUse --server-url http://localhost:7069"
-         }]
-       }]
-     }
+     "server_url": "http://localhost:7069/events",
+     "source_app": "YOUR_APP_NAME"
    }
    ```
+
+The `.claude/settings.json` file already contains the proper hook configurations - no changes needed!
 
 ### For This Project
 
@@ -406,9 +368,11 @@ Already integrated! Hooks run both validation and observability:
 },
 {
   "type": "command", 
-  "command": "uv run .claude/hooks/send_event.py --source-app cc-hooks-observability --event-type PreToolUse --server-url http://localhost:7069"
+  "command": "uv run .claude/hooks/send_event.py --event-type PreToolUse --summarize"
 }
 ```
+
+Configuration is centralized in `.claude/hooks/config.json` - no need for repeated `--server-url` or `--source-app` parameters.
 
 ## 🧪 Testing
 
@@ -442,8 +406,8 @@ ACTIVE_SUMMARIZATION_PROVIDER=anthropic
 
 **Client Configuration** (`apps/client/.env`):
 ```bash
-# Client development server port (default: 7070)
-PORT=7070
+# Client development server port (default: 5173)
+PORT=5173
 
 # Server URL for API calls and WebSocket connections
 VITE_SERVER_URL=http://localhost:7069
@@ -452,14 +416,19 @@ VITE_SERVER_URL=http://localhost:7069
 VITE_MAX_EVENTS_TO_DISPLAY=100
 ```
 
-**Claude Hooks Configuration** (`.claude/settings.json`):
-The hook commands now include explicit server URLs. All `send_event.py` calls include `--server-url http://localhost:7069` to ensure proper communication with the observability server.
+**Claude Hooks Configuration** (`.claude/hooks/config.json`):
+```json
+{
+  "server_url": "http://localhost:7069/events",
+  "source_app": "your-project-name"
+}
+```
+Centralized configuration eliminates the need for repeated `--server-url` parameters in hook commands.
 
 ### Server Ports
 
 - **Server**: `7069` (HTTP/WebSocket) - configurable via `apps/server/.env`
-- **Client**: `7070` (Vite dev server) - configurable via `apps/client/.env`
-- **Legacy ports** (`4000`/`5173`) have been replaced with the new configurable system
+- **Client**: `5173` (Vite dev server) - configurable via `apps/client/.env`
 
 ## 🔧 Troubleshooting
 

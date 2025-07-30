@@ -10,7 +10,7 @@
           },
           {
             "type": "command",
-            "command": "uv run .claude/hooks/send_event.py --server-url http://localhost:7069 --source-app 🕵️_claude-code-multi-agent-watcher --event-type PreToolUse --summarize"
+            "command": "uv run .claude/hooks/send_event.py --event-type PreToolUse --summarize"
           }
         ]
       }
@@ -25,7 +25,7 @@
           },
           {
             "type": "command",
-            "command": "uv run .claude/hooks/send_event.py --server-url http://localhost:7069 --source-app 🕵️_claude-code-multi-agent-watcher --event-type PostToolUse --summarize"
+            "command": "uv run .claude/hooks/send_event.py --event-type PostToolUse --summarize"
           }
         ]
       }
@@ -40,7 +40,7 @@
           },
           {
             "type": "command",
-            "command": "uv run .claude/hooks/send_event.py --server-url http://localhost:7069 --source-app 🕵️_claude-code-multi-agent-watcher --event-type Notification --summarize"
+            "command": "uv run .claude/hooks/send_event.py --event-type Notification --summarize"
           }
         ]
       }
@@ -55,7 +55,7 @@
           },
           {
             "type": "command",
-            "command": "uv run .claude/hooks/send_event.py --server-url http://localhost:7069 --source-app 🕵️_claude-code-multi-agent-watcher --event-type Stop --add-chat"
+            "command": "uv run .claude/hooks/send_event.py --event-type Stop --add-chat"
           }
         ]
       }
@@ -70,7 +70,7 @@
           },
           {
             "type": "command",
-            "command": "uv run .claude/hooks/send_event.py --server-url http://localhost:7069 --source-app 🕵️_claude-code-multi-agent-watcher --event-type SubagentStop"
+            "command": "uv run .claude/hooks/send_event.py --event-type SubagentStop"
           }
         ]
       }
@@ -81,7 +81,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "uv run .claude/hooks/send_event.py --server-url http://localhost:7069 --source-app 🕵️_claude-code-multi-agent-watcher --event-type PreCompact"
+            "command": "uv run .claude/hooks/send_event.py --event-type PreCompact"
           }
         ]
       }
@@ -95,7 +95,7 @@
           },
           {
             "type": "command",
-            "command": "uv run .claude/hooks/send_event.py --server-url http://localhost:7069 --source-app 🕵️_claude-code-multi-agent-watcher --event-type UserPromptSubmit --summarize"
+            "command": "uv run .claude/hooks/send_event.py --event-type UserPromptSubmit --summarize"
           }
         ]
       }

@@ -20,6 +20,7 @@ import argparse
 import urllib.request
 import urllib.error
 from datetime import datetime
+from pathlib import Path
 
 def send_event_to_server(event_data, server_url):
     """Send event data to the observability server."""
@@ -49,12 +50,36 @@ def send_event_to_server(event_data, server_url):
         print(f"Unexpected error: {e}", file=sys.stderr)
         return False
 
+def load_config():
+    """Load configuration from config.json file."""
+    config_path = Path(__file__).parent / 'config.json'
+    default_config = {
+        'server_url': 'http://localhost:7069/events',
+        'source_app': 'claude-code-hooks'
+    }
+    
+    try:
+        if config_path.exists():
+            with open(config_path, 'r', encoding='utf-8') as f:
+                config = json.load(f)
+                # Merge with defaults to ensure all keys exist
+                return {**default_config, **config}
+        else:
+            print(f"Config file not found at {config_path}, using defaults", file=sys.stderr)
+            return default_config
+    except Exception as e:
+        print(f"Failed to load config: {e}, using defaults", file=sys.stderr)
+        return default_config
+
 def main():
+    # Load configuration
+    config = load_config()
+    
     # Parse command line arguments
     parser = argparse.ArgumentParser(description='Send Claude Code hook events to observability server')
-    parser.add_argument('--source-app', required=True, help='Source application name')
+    parser.add_argument('--source-app', default=config['source_app'], help='Source application name')
     parser.add_argument('--event-type', required=True, help='Hook event type (PreToolUse, PostToolUse, etc.)')
-    parser.add_argument('--server-url', default='http://localhost:7069/events', help='Server URL')
+    parser.add_argument('--server-url', default=config['server_url'], help='Server URL')
     parser.add_argument('--add-chat', action='store_true', help='Include chat transcript if available')
     parser.add_argument('--summarize', action='store_true', help='Generate AI summary of the event')
     

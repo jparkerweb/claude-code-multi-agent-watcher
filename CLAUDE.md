@@ -22,8 +22,8 @@ This is a Multi-Agent Observability System for monitoring Claude Code agents thr
 npm run install:all              # Install server deps (Bun) and client deps (npm)
 
 # Start the complete system
-npm run start                    # Starts both server (port 4000) and client (port 5173)
-npm run kill                     # Kill processes on ports 4000 and 5173
+npm run start                    # Starts both server (port 7069) and client (port 5173)
+npm run kill                     # Kill processes on ports 7069 and 5173
 ```
 
 ### Individual Development
@@ -53,7 +53,7 @@ python hooks/test_hook_general.py  # Run hook tests
 
 1. **Bun Runtime**: The server uses Bun (not Node.js). All server-side JavaScript/TypeScript runs on Bun.
 2. **Python Package Management**: Hook scripts use `uv` (not pip) for dependency management with pyproject.toml.
-3. **Real-time Updates**: WebSocket endpoint at `ws://localhost:4000/stream` for live event streaming.
+3. **Real-time Updates**: WebSocket endpoint at `ws://localhost:7069/stream` for live event streaming.
 4. **Database**: SQLite with WAL mode for concurrent access, located at `apps/server/events.db`.
 5. **Component Structure**: Vue 3 components use Composition API with TypeScript and `<script setup>` syntax.
 6. **Styling**: Tailwind CSS with comprehensive theming system (20+ themes with custom theme creation).
@@ -76,10 +76,40 @@ Hook configurations are defined in `.claude/settings.json`. Each hook type serve
 - **Stop/SubagentStop** - Session completion tracking with chat history
 - **PreCompact** - Context compaction monitoring
 
-Key integration points:
-- Hook scripts use `send_event.py` as universal event sender with `--source-app` parameter
+### Hook Configuration System
+
+The hook system uses centralized configuration for easy portability across projects:
+
+**Configuration Files:**
+- `.claude/settings.json` - Hook event triggers and command definitions
+- `.claude/hooks/config.json` - Centralized server URL and application settings
+
+**Key integration points:**
+- Hook scripts use `send_event.py` as universal event sender
+- Configuration is loaded automatically from `.claude/hooks/config.json`
 - All hooks support `--summarize` flag for AI-powered event summarization using multiple LLM providers
 - Audio notifications are handled client-side in the web application
+
+**Portability**: Copy the entire `.claude` folder to other projects and update only the `config.json` file for project-specific settings.
+
+### Hook Configuration Structure
+
+**`.claude/hooks/config.json`** contains centralized settings:
+```json
+{
+  "server_url": "http://localhost:7069/events",
+  "source_app": "🕵️_claude-code-multi-agent-watcher"
+}
+```
+
+**Configuration Options:**
+- `server_url` - Full endpoint URL for the observability server (including `/events`)
+- `source_app` - Identifier for this project/application in the observability dashboard
+
+**Command-line Overrides**: All config values can still be overridden via command-line arguments if needed:
+```bash
+uv run .claude/hooks/send_event.py --server-url http://other-server:8080/events --source-app MyProject --event-type PreToolUse
+```
 
 ### AI Summarization Configuration
 
@@ -115,8 +145,9 @@ apps/server/src/db.ts          # SQLite database layer with migrations
 apps/client/src/App.vue        # Main Vue app with WebSocket management
 apps/client/src/composables/useSound.ts  # Sound management composable
 .claude/hooks/send_event.py    # Universal event sender for all hook types
+.claude/hooks/config.json      # Centralized hook configuration (server URL, source app)
 .claude/hooks/utils/           # LLM integrations and summarization utilities
 .claude/hooks/utils/llm/anth.py       # Anthropic Claude API integration
 .claude/hooks/utils/llm/openrouter.py # OpenRouter API integration  
 .claude/hooks/utils/summarizer.py     # Multi-provider LLM selection logic
-.claude/settings.json          # Hook configurations for this project
+.claude/settings.json          # Hook event triggers and command definitions
